@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 18, 2025 at 08:34 AM
+-- Generation Time: May 19, 2025 at 02:01 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.19
 
@@ -32,16 +32,17 @@ CREATE TABLE `alternative_fish` (
   `FISH_ID` varchar(10) NOT NULL,
   `NAME` varchar(100) DEFAULT NULL,
   `DESCRIPTION` text,
-  `FOOD_ID` varchar(10) DEFAULT NULL
+  `FOOD_ID` varchar(10) DEFAULT NULL,
+  `IMAGE` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `alternative_fish`
 --
 
-INSERT INTO `alternative_fish` (`AUTO_ID`, `FISH_ID`, `NAME`, `DESCRIPTION`, `FOOD_ID`) VALUES
-(1, 'FSH00001', 'Ikan Cupang', 'Ikan yang suka nyupang', 'FOD00001'),
-(2, 'FSH00002', 'Ikan Guppy', 'gaptek', 'FOD00001');
+INSERT INTO `alternative_fish` (`AUTO_ID`, `FISH_ID`, `NAME`, `DESCRIPTION`, `FOOD_ID`, `IMAGE`) VALUES
+(1, 'FSH00001', 'Ikan Cupang', 'Ikan yang suka nyupang', 'FOD00001', ''),
+(2, 'FSH00002', 'Ikan Guppy', 'gaptek', 'FOD00001', '');
 
 --
 -- Triggers `alternative_fish`
@@ -105,18 +106,19 @@ CREATE TABLE `fish_variety` (
   `FISH_VARIETY_ID` varchar(10) NOT NULL,
   `VARIETY_NAME` varchar(100) DEFAULT NULL,
   `DESCRIPTION` text,
-  `FISH_ID` varchar(10) DEFAULT NULL
+  `FISH_ID` varchar(10) DEFAULT NULL,
+  `IMAGE` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `fish_variety`
 --
 
-INSERT INTO `fish_variety` (`AUTO_ID`, `FISH_VARIETY_ID`, `VARIETY_NAME`, `DESCRIPTION`, `FISH_ID`) VALUES
-(1, 'FVT00001', 'Half Moon', 'Terang bulan', 'FSH00001'),
-(2, 'FVT00002', 'Crown Tail', 'Ekor Mahkota', 'FSH00001'),
-(3, 'FVT00003', 'Red Dragon', 'saya suka naga merah', 'FSH00002'),
-(4, 'FVT00004', 'Blue Dragon', 'naga biru lee', 'FSH00002');
+INSERT INTO `fish_variety` (`AUTO_ID`, `FISH_VARIETY_ID`, `VARIETY_NAME`, `DESCRIPTION`, `FISH_ID`, `IMAGE`) VALUES
+(1, 'FVT00001', 'Half Moon', 'Terang bulan', 'FSH00001', ''),
+(2, 'FVT00002', 'Crown Tail', 'Ekor Mahkota', 'FSH00001', ''),
+(3, 'FVT00003', 'Red Dragon', 'saya suka naga merah', 'FSH00002', ''),
+(4, 'FVT00004', 'Blue Dragon', 'naga biru lee', 'FSH00002', '');
 
 --
 -- Triggers `fish_variety`
@@ -141,15 +143,16 @@ CREATE TABLE `food` (
   `AUTO_ID` int NOT NULL,
   `FOOD_ID` varchar(10) NOT NULL,
   `NAME` varchar(100) DEFAULT NULL,
-  `DESCRIPTION` varchar(200) DEFAULT NULL
+  `DESCRIPTION` varchar(200) DEFAULT NULL,
+  `IMAGE` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `food`
 --
 
-INSERT INTO `food` (`AUTO_ID`, `FOOD_ID`, `NAME`, `DESCRIPTION`) VALUES
-(1, 'FOD00001', 'Pelet', 'Pelet merupakan makanan paling umum');
+INSERT INTO `food` (`AUTO_ID`, `FOOD_ID`, `NAME`, `DESCRIPTION`, `IMAGE`) VALUES
+(1, 'FOD00001', 'Pelet', 'Pelet merupakan makanan paling umum', '');
 
 --
 -- Triggers `food`
