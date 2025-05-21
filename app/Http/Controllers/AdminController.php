@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use App\Models\Food;
 use App\Models\AlternativeFish;
 use Illuminate\Http\Request;
@@ -17,15 +19,10 @@ class AdminController extends Controller
     }
 
     // ====== FOOD CRUD ======
-    public function createFood()
-    {
-        return view('admin.create_food');
-    }
 
     public function storeFood(Request $request)
     {
         $request->validate([
-            'FOOD_ID' => 'required|unique:FOOD,FOOD_ID',
             'NAME' => 'required',
             'DESCRIPTION' => 'nullable',
             'IMAGE' => 'nullable',
@@ -64,27 +61,55 @@ class AdminController extends Controller
         return redirect()->route('admin.index');
     }
 
-    // ====== IKAN CRUD ======
-    public function createIkan()
+    public function softDeleteFood($id)
     {
-        $foods = Food::all();
-        return view('admin.create_ikan', compact('foods'));
+        $food = Food::findOrFail($id);
+        $food->is_deleted = 1;
+        $food->save();
+
+        return redirect()->route('admin.index');
     }
+
+    public function recoverFood($id)
+    {
+        $food = Food::findOrFail($id);
+        $food->is_deleted = 0;
+        $food->save();
+
+        return redirect()->route('admin.index');
+    }
+
+    // ====== IKAN CRUD ======
 
     public function storeIkan(Request $request)
     {
-        $request->validate([
-            'FISH_ID' => 'required|unique:ALTERNATIVE_FISH,FISH_ID',
+        $validator = Validator::make($request->all(), [
+            'IMAGE' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'NAME' => 'required',
             'DESCRIPTION' => 'nullable',
             'FOOD_ID' => 'required|exists:FOOD,FOOD_ID',
         ]);
 
-        AlternativeFish::create($request->all());
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
-        return redirect()->route('admin.index');
+        // Simpan file gambar
+        $image = $request->file('IMAGE');
+        $image->storeAs('alternative_fishes', $image->hashName(), 'public');
+
+        // Simpan data ikan
+        AlternativeFish::create([
+            'FISH_ID' => (string) Str::uuid(),
+            'NAME' => $request->NAME,
+            'DESCRIPTION' => $request->DESCRIPTION,
+            'IMAGE' => $image->hashName(),
+            'FOOD_ID' => $request->FOOD_ID,
+            'IS_DELETED' => 0,
+        ]);
+
+        return redirect()->route('admin.index')->with('success', 'Ikan berhasil ditambahkan');
     }
-
     public function editIkan($id)
     {
         $fish = AlternativeFish::findOrFail($id);
@@ -98,6 +123,7 @@ class AdminController extends Controller
             'NAME' => 'required',
             'DESCRIPTION' => 'nullable',
             'FOOD_ID' => 'required|exists:FOOD,FOOD_ID',
+            'IMAGE' => 'nullable',
         ]);
 
         $fish = AlternativeFish::findOrFail($id);
@@ -118,6 +144,15 @@ class AdminController extends Controller
         $fish = AlternativeFish::findOrFail($id);
         $fish->is_deleted = 1;
         $fish->save();
+
+        return redirect()->route('admin.index');
+    }
+
+    public function recoverIkan($id)
+    {
+        $ikan = AlternativeFish::findOrFail($id);
+        $ikan->is_deleted = 0;
+        $ikan->save();
 
         return redirect()->route('admin.index');
     }
