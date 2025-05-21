@@ -92,20 +92,26 @@
 
                     <label class="block text-sm font-medium text-gray-700 mb-1 text-left">Email</label>
                     <input type="email" name="email" placeholder="Your email" class="w-full p-3 border rounded mb-4" value="{{ old('email') }}" required />
-                    @error('email', 'login')
-                    <p class="text-red-500 text-sm mb-2">{{ $message }}</p>
-                    @enderror
 
                     <label class="block text-sm font-medium text-gray-700 mb-1 text-left">Password</label>
-                    <div class="relative mb-6">
+                    <div class="relative mb-2">
                         <input type="password" id="login-password" name="password" placeholder="Your password" class="w-full p-3 border rounded pr-10" required />
                         <span id="login-password-toggle" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer hidden" onclick="togglePassword('login-password')">
                             <!-- SVG Icons -->
                         </span>
                     </div>
-                    @error('password', 'login')
-                    <p class="text-red-500 text-sm mb-4">{{ $message }}</p>
+                    @error('email', 'login')
+                    <p class="flex justify-start text-red-500 text-sm mb-2">{{ $message }}</p>
                     @enderror
+
+                    <div class="flex justify-end mt-2 mb-8">
+                        <label class="flex items-center space-x-2 cursor-pointer text-sm">
+                            <input type="checkbox" name="remember" class="w-4 h-4 text-blue-600 rounded">
+                            <span class="text-gray-700">Remember Me</span>
+                        </label>
+                    </div>
+
+
 
                     <button type="submit" class="w-full bg-black text-white py-3 rounded-full font-semibold mb-4">Sign In</button>
 
@@ -115,6 +121,7 @@
                         <img src="{{ asset('assets/images/icon-google.svg') }}" class="h-5 mr-2" alt="Google Icon">
                         Continue with Google
                     </a>
+
 
                 </form>
             </div>

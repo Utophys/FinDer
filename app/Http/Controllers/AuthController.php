@@ -11,11 +11,14 @@ use Illuminate\Support\Facades\Validator;
 use Laravel\Socialite\Facades\Socialite;
 
 
-
 class AuthController extends Controller
 {
     public function show()
     {
+        if (auth()->check()) {
+            return redirect('/homepage');
+        }
+
         $activePanel = session('active_panel', 'login');
         return view('login_register', compact('activePanel'));
     }
@@ -23,6 +26,9 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember');
+
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
@@ -39,12 +45,13 @@ class AuthController extends Controller
                 ->with('active_panel', 'login');
         }
 
-        if (Auth::attempt($request->only('email', 'password'))) {
+        if (Auth::attempt($credentials, $remember)) {
             return redirect()->intended('homepage');
         }
 
+
         return redirect()->route('auth.show')
-            ->withErrors(['email' => 'Invalid credentials'], 'login')
+            ->withErrors(['email' => 'Email atau Password yang anda isi salah!'], 'login')
             ->withInput()
             ->with('active_panel', 'login');
     }
@@ -95,7 +102,7 @@ class AuthController extends Controller
         ]);
 
         return redirect()->route('auth.show')
-            ->with('success', 'Registration successful! You can now log in.')
+            ->with('success', 'Registrasi Berhasil!.')
             ->with('active_panel', 'login');
     }
 
@@ -124,7 +131,7 @@ class AuthController extends Controller
                 ]);
             }
 
-            Auth::login($user);
+            Auth::login($user, true);
 
             return redirect()->intended('homepage');
         } catch (\Exception $e) {

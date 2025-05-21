@@ -3,10 +3,16 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
+// default route
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/auth');
 });
+Route::get('/auth', [AuthController::class, 'show'])->name('auth.show');
 
+// homepage route
+Route::get('/homepage', function () {
+    return view('user.homepage');
+})->middleware('auth');
 
 //kai cenat
 Route::get('/auth/google/redirect', [AuthController::class, 'redirectToGoogle'])->name('google.redirect');
@@ -14,11 +20,15 @@ Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallbac
 
 // login register
 Route::middleware(['guest'])->group(function () {
-    Route::get('/auth', [AuthController::class, 'show'])->name('auth.show');
-
     Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/register', [AuthController::class, 'register'])->name('register');
 });
+
+// Route::post('/logout', function () {
+//     auth()->logout();
+//     return redirect('/auth');
+// })->name('logout')->middleware('auth');
+
 
 
 
