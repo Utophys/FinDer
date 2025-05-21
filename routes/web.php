@@ -3,9 +3,14 @@
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
-
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::middleware([])->group(function () {
+    Route::get('/login', function () {
+        return view('login_register');
+    });
 });
 
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
