@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 19, 2025 at 02:01 PM
+-- Generation Time: May 20, 2025 at 05:04 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.19
 
@@ -33,16 +33,17 @@ CREATE TABLE `alternative_fish` (
   `NAME` varchar(100) DEFAULT NULL,
   `DESCRIPTION` text,
   `FOOD_ID` varchar(10) DEFAULT NULL,
-  `IMAGE` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+  `IMAGE` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `IS_DELETED` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `alternative_fish`
 --
 
-INSERT INTO `alternative_fish` (`AUTO_ID`, `FISH_ID`, `NAME`, `DESCRIPTION`, `FOOD_ID`, `IMAGE`) VALUES
-(1, 'FSH00001', 'Ikan Cupang', 'Ikan yang suka nyupang', 'FOD00001', ''),
-(2, 'FSH00002', 'Ikan Guppy', 'gaptek', 'FOD00001', '');
+INSERT INTO `alternative_fish` (`AUTO_ID`, `FISH_ID`, `NAME`, `DESCRIPTION`, `FOOD_ID`, `IMAGE`, `IS_DELETED`) VALUES
+(1, 'FSH00001', 'Ikan Channa', 'Ikan yang suka nyupang', 'FOD00001', '', 0),
+(2, 'FSH00002', 'Ikan Guppy', 'gaptek', 'FOD00001', '', 0);
 
 --
 -- Triggers `alternative_fish`
@@ -53,6 +54,12 @@ CREATE TRIGGER `trg_fish_id` BEFORE INSERT ON `alternative_fish` FOR EACH ROW BE
     SET @next_id = (SELECT IFNULL(MAX(AUTO_ID), 0) + 1 FROM ALTERNATIVE_FISH);
     SET NEW.FISH_ID = CONCAT('FSH', LPAD(@next_id, 5, '0'));
   END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trg_insert_alternative_fish` BEFORE INSERT ON `alternative_fish` FOR EACH ROW BEGIN
+    SET NEW.is_deleted = 0;
 END
 $$
 DELIMITER ;
@@ -107,18 +114,19 @@ CREATE TABLE `fish_variety` (
   `VARIETY_NAME` varchar(100) DEFAULT NULL,
   `DESCRIPTION` text,
   `FISH_ID` varchar(10) DEFAULT NULL,
-  `IMAGE` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+  `IMAGE` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `IS_DELETED` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `fish_variety`
 --
 
-INSERT INTO `fish_variety` (`AUTO_ID`, `FISH_VARIETY_ID`, `VARIETY_NAME`, `DESCRIPTION`, `FISH_ID`, `IMAGE`) VALUES
-(1, 'FVT00001', 'Half Moon', 'Terang bulan', 'FSH00001', ''),
-(2, 'FVT00002', 'Crown Tail', 'Ekor Mahkota', 'FSH00001', ''),
-(3, 'FVT00003', 'Red Dragon', 'saya suka naga merah', 'FSH00002', ''),
-(4, 'FVT00004', 'Blue Dragon', 'naga biru lee', 'FSH00002', '');
+INSERT INTO `fish_variety` (`AUTO_ID`, `FISH_VARIETY_ID`, `VARIETY_NAME`, `DESCRIPTION`, `FISH_ID`, `IMAGE`, `IS_DELETED`) VALUES
+(1, 'FVT00001', 'Half Moon', 'Terang bulan', 'FSH00001', '', 0),
+(2, 'FVT00002', 'Crown Tail', 'Ekor Mahkota', 'FSH00001', '', 0),
+(3, 'FVT00003', 'Red Dragon', 'saya suka naga merah', 'FSH00002', '', 0),
+(4, 'FVT00004', 'Blue Dragon', 'naga biru lee', 'FSH00002', '', 0);
 
 --
 -- Triggers `fish_variety`
@@ -129,6 +137,12 @@ CREATE TRIGGER `trg_fish_variety_id` BEFORE INSERT ON `fish_variety` FOR EACH RO
     SET @next_id = (SELECT IFNULL(MAX(AUTO_ID), 0) + 1 FROM FISH_VARIETY);
     SET NEW.FISH_VARIETY_ID = CONCAT('FVT', LPAD(@next_id, 5, '0'));
   END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trg_insert_fish_variety` BEFORE INSERT ON `fish_variety` FOR EACH ROW BEGIN
+    SET NEW.is_deleted = 0;
 END
 $$
 DELIMITER ;
@@ -144,15 +158,16 @@ CREATE TABLE `food` (
   `FOOD_ID` varchar(10) NOT NULL,
   `NAME` varchar(100) DEFAULT NULL,
   `DESCRIPTION` varchar(200) DEFAULT NULL,
-  `IMAGE` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+  `IMAGE` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `IS_DELETED` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `food`
 --
 
-INSERT INTO `food` (`AUTO_ID`, `FOOD_ID`, `NAME`, `DESCRIPTION`, `IMAGE`) VALUES
-(1, 'FOD00001', 'Pelet', 'Pelet merupakan makanan paling umum', '');
+INSERT INTO `food` (`AUTO_ID`, `FOOD_ID`, `NAME`, `DESCRIPTION`, `IMAGE`, `IS_DELETED`) VALUES
+(1, 'FOD00001', 'Pelet', 'Pelet merupakan makanan paling umum', '', 0);
 
 --
 -- Triggers `food`
@@ -163,6 +178,12 @@ CREATE TRIGGER `trg_food_id` BEFORE INSERT ON `food` FOR EACH ROW BEGIN
     SET @next_id = (SELECT IFNULL(MAX(AUTO_ID), 0) + 1 FROM FOOD);
     SET NEW.FOOD_ID = CONCAT('FOD', LPAD(@next_id, 5, '0'));
   END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `trg_insert_food` BEFORE INSERT ON `food` FOR EACH ROW BEGIN
+    SET NEW.is_deleted = 0;
 END
 $$
 DELIMITER ;
@@ -317,6 +338,28 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `sessions`
+--
+
+CREATE TABLE `sessions` (
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_agent` text COLLATE utf8mb4_unicode_ci,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_activity` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `sessions`
+--
+
+INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
+('pOdA6ASIORAQJGnXylejW1IsJ4HYRmsnYnmmpA2b', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiMFJ5aURNSHNqYlZTcE8wSXZVbVBPZXlvbGM1S013a1pzV3JNcWxuNyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1747759537);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `user_account`
 --
 
@@ -327,20 +370,27 @@ CREATE TABLE `user_account` (
   `DISPLAY_NAME` varchar(100) DEFAULT NULL,
   `PASSWORD` varchar(100) DEFAULT NULL,
   `ROLE` varchar(20) DEFAULT NULL,
-  `EMAIL` varchar(40) NOT NULL
+  `EMAIL` varchar(40) NOT NULL,
+  `IS_DELETED` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `user_account`
 --
 
-INSERT INTO `user_account` (`AUTO_ID`, `USER_ID`, `USERNAME`, `DISPLAY_NAME`, `PASSWORD`, `ROLE`, `EMAIL`) VALUES
-(1, 'USR00001', 'Ripat', 'ripatganteng', 'aduhai', 'user', 'mochamad@gmail.com'),
-(2, 'USR00002', 'admin', 'iniAdminWo', 'sultantanahsunda', 'admin', 'admin@gmail.com');
+INSERT INTO `user_account` (`AUTO_ID`, `USER_ID`, `USERNAME`, `DISPLAY_NAME`, `PASSWORD`, `ROLE`, `EMAIL`, `IS_DELETED`) VALUES
+(1, 'USR00001', 'Ripat', 'ripatganteng', 'aduhai', 'user', 'mochamad@gmail.com', 0),
+(2, 'USR00002', 'admin', 'iniAdminWo', 'sultantanahsunda', 'admin', 'admin@gmail.com', 0);
 
 --
 -- Triggers `user_account`
 --
+DELIMITER $$
+CREATE TRIGGER `trg_insert_user_account` BEFORE INSERT ON `user_account` FOR EACH ROW BEGIN
+    SET NEW.is_deleted = 0;
+END
+$$
+DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER `trg_user_id` BEFORE INSERT ON `user_account` FOR EACH ROW BEGIN
   IF NEW.USER_ID IS NULL OR NEW.USER_ID = '' THEN
@@ -420,6 +470,14 @@ ALTER TABLE `result_detail`
   ADD UNIQUE KEY `AUTO_ID` (`AUTO_ID`),
   ADD KEY `RESULT_ID` (`RESULT_ID`),
   ADD KEY `FISH_ID` (`FISH_ID`);
+
+--
+-- Indexes for table `sessions`
+--
+ALTER TABLE `sessions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sessions_user_id_index` (`user_id`),
+  ADD KEY `sessions_last_activity_index` (`last_activity`);
 
 --
 -- Indexes for table `user_account`
