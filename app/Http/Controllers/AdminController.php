@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Models\Food;
 use App\Models\AlternativeFish;
+use App\Models\Criteria;
+use App\Models\MasterAlternative;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -14,43 +17,74 @@ class AdminController extends Controller
     {
         $foods = Food::all();
         $fishes = AlternativeFish::all();
+        $criterias = Criteria::all();
 
-        return view('admin.index', compact('foods', 'fishes'));
+        return view('admin.index', compact('foods', 'fishes', 'criterias'));
     }
 
     // ====== FOOD CRUD ======
 
     public function storeFood(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
+            'IMAGE' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'NAME' => 'required',
             'DESCRIPTION' => 'nullable',
-            'IMAGE' => 'nullable',
+            // jika ada relasi kategori makanan bisa ditambahkan validasi seperti 'FOOD_CATEGORY_ID' => 'exists:food_categories,id'
         ]);
 
-        Food::create($request->all());
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
-        return redirect()->route('admin.index');
-    }
+        $imageName = null;
+        if ($request->hasFile('IMAGE')) {
+            $image = $request->file('IMAGE');
+            $image->storeAs('foods', $image->hashName(), 'public');
+            $imageName = $image->hashName();
+        }
 
-    public function editFood($id)
-    {
-        $food = Food::findOrFail($id);
-        return view('admin.edit_food', compact('food'));
+        Food::create([
+            'FOOD_ID' => (string) Str::uuid(),
+            'NAME' => $request->NAME,
+            'DESCRIPTION' => $request->DESCRIPTION,
+            'IMAGE' => $imageName,
+            // tambahkan kolom lain jika ada
+        ]);
+
+        return redirect()->route('admin.index')->with('success', 'Makanan berhasil ditambahkan');
     }
 
     public function updateFood(Request $request, $id)
     {
         $request->validate([
-            'NAME' => 'required',
-            'DESCRIPTION' => 'nullable',
-            'IMAGE' => 'nullable',
+            'NAME' => 'required|string|max:255',
+            'DESCRIPTION' => 'nullable|string',
+            'IMAGE' => 'nullable|image|max:2048', // max 2MB
         ]);
 
         $food = Food::findOrFail($id);
-        $food->update($request->all());
 
-        return redirect()->route('admin.index');
+        // Jika ada file gambar baru, upload dan update path
+        if ($request->hasFile('IMAGE')) {
+            // Hapus gambar lama jika ada
+            if ($food->IMAGE && Storage::disk('public')->exists('foods/' . $food->IMAGE)) {
+                Storage::disk('public')->delete('foods/' . $food->IMAGE);
+            }
+
+            // Simpan file baru
+            $image = $request->file('IMAGE');
+            $image->storeAs('foods', $image->hashName(), 'public');
+            $food->IMAGE = $image->hashName();
+        }
+
+        // Update nama dan deskripsi
+        $food->NAME = $request->NAME;
+        $food->DESCRIPTION = $request->DESCRIPTION;
+
+        $food->save();
+
+        return redirect()->route('admin.index')->with('success', 'Data makanan berhasil diperbarui.');
     }
 
     public function deleteFood($id)
@@ -110,27 +144,40 @@ class AdminController extends Controller
 
         return redirect()->route('admin.index')->with('success', 'Ikan berhasil ditambahkan');
     }
-    public function editIkan($id)
-    {
-        $fish = AlternativeFish::findOrFail($id);
-        $foods = Food::all();
-        return view('admin.edit_ikan', compact('fish', 'foods'));
-    }
 
     public function updateIkan(Request $request, $id)
     {
         $request->validate([
-            'NAME' => 'required',
-            'DESCRIPTION' => 'nullable',
+            'NAME' => 'required|string',
+            'DESCRIPTION' => 'nullable|string',
             'FOOD_ID' => 'required|exists:FOOD,FOOD_ID',
-            'IMAGE' => 'nullable',
+            'IMAGE' => 'nullable|image|max:2048', // max 2MB
         ]);
 
         $fish = AlternativeFish::findOrFail($id);
-        $fish->update($request->all());
 
-        return redirect()->route('admin.index');
+        // Jika ada file gambar baru, upload dan update path
+        if ($request->hasFile('IMAGE')) {
+            // Hapus gambar lama jika ada
+            if ($fish->IMAGE && Storage::disk('public')->exists('alternative_fishes/' . $fish->IMAGE)) {
+                Storage::disk('public')->delete('alternative_fishes/' . $fish->IMAGE);
+            }
+
+            // Simpan file baru
+            $image = $request->file('IMAGE');
+            $image->storeAs('alternative_fishes', $image->hashName(), 'public');
+            $fish->IMAGE = $image->hashName();
+        }
+
+        $fish->NAME = $request->NAME;
+        $fish->DESCRIPTION = $request->DESCRIPTION;
+        $fish->FOOD_ID = $request->FOOD_ID;
+
+        $fish->save();
+
+        return redirect()->route('admin.index')->with('success', 'Data ikan berhasil diperbarui.');
     }
+
 
     public function deleteIkan($id)
     {
@@ -156,5 +203,44 @@ class AdminController extends Controller
 
         return redirect()->route('admin.index');
     }
+
+    public function verifyIkan(Request $request, $fishId)
+    {
+        // Validasi data
+
+        $request->validate([
+            'criteria' => 'required|array',
+            'criteria.*' => 'required|string',
+        ]);
+
+        // Cari ikan
+        $ikan = AlternativeFish::findOrFail($fishId);
+
+        foreach ($request->criteria as $criteriaId => $value) {
+            if (empty($criteriaId) || !Criteria::where('CRITERIA_ID', $criteriaId)->exists()) {
+                \Log::warning("Invalid CRITERIA_ID: $criteriaId");
+                continue;
+            }
+
+            MasterAlternative::updateOrCreate(
+                [
+                    'FISH_ID' => $fishId,
+                    'CRITERIA_ID' => $criteriaId,
+                ],
+                [
+                    'VALUE' => $value,
+                ]
+            );
+        }
+
+
+        // Setelah semua tersimpan, update status verifikasi ikan
+        $ikan->IS_VERIFIED = 1;
+        $ikan->save();
+
+        return redirect()->route('admin.index')->with('success', 'Ikan berhasil diverifikasi.');
+    }
+
+
 
 }

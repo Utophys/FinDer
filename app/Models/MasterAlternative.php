@@ -2,25 +2,23 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Str;
 
-class Food extends Model
+class MasterAlternative extends Model
 {
-    protected $table = 'FOOD';
-    protected $primaryKey = 'FOOD_ID';
+    protected $table = 'MASTER_ALTERNATIVES';
+    protected $primaryKey = 'MASTER_ALTERNATIVES_ID';
     public $incrementing = false;
     public $keyType = 'string';
     public $timestamps = false;
 
-    protected $fillable = ['FOOD_ID', 'NAME', 'DESCRIPTION', 'IMAGE'];
+    protected $fillable = ['MASTER_ALTERNATIVES_ID', 'CRITERIA_ID', 'FISH_ID', 'VALUE'];
 
     protected static function boot()
     {
         parent::boot();
 
         static::creating(function ($model) {
-            // Generate UUID hanya jika FOOD_ID belum di-set
             if (empty($model->{$model->getKeyName()})) {
                 $model->{$model->getKeyName()} = (string) Str::uuid();
             }
@@ -29,13 +27,13 @@ class Food extends Model
 
     public function alternativeFish()
     {
-        return $this->hasMany(AlternativeFish::class, 'FOOD_ID', 'FOOD_ID');
+        return $this->belongsTo(AlternativeFish::class, 'FISH_ID', 'FISH_ID');
     }
 
-    protected function image(): Attribute
+    public function criteria()
     {
-        return Attribute::make(
-            get: fn($image) => url('/storage/foods/' . $image),
-        );
+        return $this->belongsTo(Criteria::class, 'CRITERIA_ID', 'CRITERIA_ID');
     }
+
+
 }

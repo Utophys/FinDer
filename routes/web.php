@@ -35,3 +35,4 @@ Route::post('/admin/ikan', [AdminController::class, 'storeIkan'])->name('admin.i
 Route::put('/admin/ikan/{id}', [AdminController::class, 'updateIkan'])->name('admin.ikan.update');
 Route::put('/admin/ikan/{id}/soft-delete', [AdminController::class, 'softDeleteIkan'])->name('admin.ikan.softDelete');
 Route::put('/admin/ikan/{id}/recover', [AdminController::class, 'recoverIkan'])->name('admin.ikan.recover');
+Route::put('/admin/ikan/{id}/verify', [AdminController::class, 'verifyIkan'])->name('admin.ikan.verify');
