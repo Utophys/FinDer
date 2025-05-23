@@ -49,16 +49,10 @@
         <!-- Konten kanan -->
         <div class="bg-[#0E87CC] w-[70%] h-full overflow-y-auto p-8 text-white">
 
-            {{-- Header (jika ada) --}}
-            @include('partials.header')
-
             {{-- Konten utama halaman --}}
             <main>
                 @yield('content')
             </main>
-
-            {{-- Footer --}}
-            @include('partials.footer')
 
         </div>
     </div>
