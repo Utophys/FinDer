@@ -7,20 +7,29 @@ use Illuminate\Support\Str;
 use App\Models\Food;
 use App\Models\AlternativeFish;
 use App\Models\Criteria;
+use App\Models\Results;
 use App\Models\MasterAlternative;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function index()
+    public function fishIndex()
     {
-        $foods = Food::all();
         $fishes = AlternativeFish::all();
         $criterias = Criteria::all();
+        $foods = Food::all();
 
-        return view('admin.index', compact('foods', 'fishes', 'criterias'));
+        return view('admin.fishes.index', compact('fishes', 'criterias', 'foods'));
     }
+
+    public function foodIndex()
+    {
+        $foods = Food::all();
+
+        return view('admin.foods.index', compact('foods'));
+    }
+
 
     // ====== FOOD CRUD ======
 
@@ -52,7 +61,7 @@ class AdminController extends Controller
             // tambahkan kolom lain jika ada
         ]);
 
-        return redirect()->route('admin.index')->with('success', 'Makanan berhasil ditambahkan');
+        return redirect()->route('admin.foods.index')->with('success', 'Makanan berhasil ditambahkan');
     }
 
     public function updateFood(Request $request, $id)
@@ -84,15 +93,7 @@ class AdminController extends Controller
 
         $food->save();
 
-        return redirect()->route('admin.index')->with('success', 'Data makanan berhasil diperbarui.');
-    }
-
-    public function deleteFood($id)
-    {
-        $food = Food::findOrFail($id);
-        $food->delete();
-
-        return redirect()->route('admin.index');
+        return redirect()->route('admin.foods.index')->with('success', 'Data makanan berhasil diperbarui.');
     }
 
     public function softDeleteFood($id)
@@ -101,7 +102,7 @@ class AdminController extends Controller
         $food->is_deleted = 1;
         $food->save();
 
-        return redirect()->route('admin.index');
+        return redirect()->route('admin.foods.index');
     }
 
     public function recoverFood($id)
@@ -110,7 +111,7 @@ class AdminController extends Controller
         $food->is_deleted = 0;
         $food->save();
 
-        return redirect()->route('admin.index');
+        return redirect()->route('admin.foods.index');
     }
 
     // ====== IKAN CRUD ======
@@ -142,7 +143,7 @@ class AdminController extends Controller
             'IS_DELETED' => 0,
         ]);
 
-        return redirect()->route('admin.index')->with('success', 'Ikan berhasil ditambahkan');
+        return redirect()->route('admin.fishes.index')->with('success', 'Ikan berhasil ditambahkan');
     }
 
     public function updateIkan(Request $request, $id)
@@ -175,24 +176,16 @@ class AdminController extends Controller
 
         $fish->save();
 
-        return redirect()->route('admin.index')->with('success', 'Data ikan berhasil diperbarui.');
+        return redirect()->route('admin.fishes.index')->with('success', 'Data ikan berhasil diperbarui.');
     }
 
-
-    public function deleteIkan($id)
-    {
-        $fish = AlternativeFish::findOrFail($id);
-        $fish->delete();
-
-        return redirect()->route('admin.index');
-    }
     public function softDeleteIkan($id)
     {
         $fish = AlternativeFish::findOrFail($id);
         $fish->is_deleted = 1;
         $fish->save();
 
-        return redirect()->route('admin.index');
+        return redirect()->route('admin.fishes.index');
     }
 
     public function recoverIkan($id)
@@ -201,7 +194,7 @@ class AdminController extends Controller
         $ikan->is_deleted = 0;
         $ikan->save();
 
-        return redirect()->route('admin.index');
+        return redirect()->route('admin.fishes.index');
     }
 
     public function verifyIkan(Request $request, $fishId)
@@ -238,9 +231,15 @@ class AdminController extends Controller
         $ikan->IS_VERIFIED = 1;
         $ikan->save();
 
-        return redirect()->route('admin.index')->with('success', 'Ikan berhasil diverifikasi.');
+        return redirect()->route('admin.fishes.index')->with('success', 'Ikan berhasil diverifikasi.');
     }
 
+    public function resultIndex()
+    {
+        $results = Results::with(['details', 'masterCriteria'])->get();
+
+        return view('admin.user-results.index', compact('results'));
+    }
 
 
 }
