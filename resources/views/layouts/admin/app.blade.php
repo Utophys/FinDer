@@ -42,6 +42,9 @@
                 <a href="/admin/user-results" class="bg-green-500 text-white px-4 mb-4 py-2 rounded hover:bg-green-600 transition">
                     Kelola History
                 </a>
+                <a href="/admin/varieties" class="bg-green-500 text-white px-4 mb-4 py-2 rounded hover:bg-green-600 transition">
+                    Kelola Varietas Ikan
+                </a>
             </div>
         </div>
 

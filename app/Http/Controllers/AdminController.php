@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Variety;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Models\Food;
@@ -28,6 +29,21 @@ class AdminController extends Controller
         $foods = Food::all();
 
         return view('admin.foods.index', compact('foods'));
+    }
+
+    public function resultIndex()
+    {
+        $results = Results::with(['details', 'masterCriteria'])->get();
+
+        return view('admin.user-results.index', compact('results'));
+    }
+
+    public function varietyIndex()
+    {
+        $varieties = Variety::all()->groupBy('FISH_ID');
+        $fishes = AlternativeFish::all();
+
+        return view('admin.varieties.index', compact('varieties', 'fishes'));
     }
 
 
@@ -234,12 +250,94 @@ class AdminController extends Controller
         return redirect()->route('admin.fishes.index')->with('success', 'Ikan berhasil diverifikasi.');
     }
 
-    public function resultIndex()
-    {
-        $results = Results::with(['details', 'masterCriteria'])->get();
 
-        return view('admin.user-results.index', compact('results'));
+
+    public function storeVariety(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'IMAGE' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'VARIETY_NAME' => 'required',
+            'DESCRIPTION' => 'nullable',
+            'FISH_ID' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Simpan file gambar
+        $image = $request->file('IMAGE');
+        $image->storeAs('fish_varieties', $image->hashName(), 'public');
+
+        // Simpan data ikan
+        Variety::create([
+            'FISH_VARIETY_ID' => (string) Str::uuid(),
+            'VARIETY_NAME' => $request->VARIETY_NAME,
+            'DESCRIPTION' => $request->DESCRIPTION,
+            'IMAGE' => $image->hashName(),
+            'FISH_ID' => $request->FISH_ID,
+            'IS_DELETED' => 0,
+        ]);
+
+        return redirect()->route('admin.varieties.index')->with('success', 'Variasi ikan berhasil ditambahkan');
     }
+
+    public function updateVariety(Request $request, $id)
+    {
+        $request->validate([
+            'IMAGE' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'VARIETY_NAME' => 'required',
+            'DESCRIPTION' => 'nullable',
+            'FISH_ID' => 'required',
+        ]);
+
+        $variety = Variety::findOrFail($id); // Gunakan model Variety
+
+        // Jika ada file gambar baru
+        if ($request->hasFile('IMAGE')) {
+            // Hapus gambar lama jika ada
+            if ($variety->IMAGE && Storage::disk('public')->exists('fish_varieties/' . $variety->IMAGE)) {
+                Storage::disk('public')->delete('fish_varieties/' . $variety->IMAGE);
+            }
+
+            // Simpan gambar baru
+            $image = $request->file('IMAGE');
+            $image->storeAs('fish_varieties', $image->hashName(), 'public');
+            $variety->IMAGE = $image->hashName();
+        }
+
+        // Update data lainnya
+        $variety->VARIETY_NAME = $request->VARIETY_NAME;
+        $variety->DESCRIPTION = $request->DESCRIPTION;
+        $variety->FISH_ID = $request->FISH_ID;
+
+        $variety->save();
+
+        return redirect()->route('admin.varieties.index')->with('success', 'Variasi ikan berhasil diperbarui.');
+    }
+
+
+    public function softDeleteVariety($id)
+    {
+        $variety = Variety::findOrFail($id);
+        $variety->is_deleted = 1;
+        $variety->save();
+
+        return redirect()->route('admin.varieties.index');
+    }
+
+    public function recoverVariety($id)
+    {
+        $variety = Variety::findOrFail($id);
+        $variety->is_deleted = 0;
+        $variety->save();
+
+        return redirect()->route('admin.varieties.index');
+    }
+
+
+
+
 
 
 }
