@@ -35,6 +35,7 @@ Route::middleware(['guest'])->group(function () {
 Route::get('/admin/foods', [AdminController::class, 'foodIndex'])->name('admin.foods.index');
 Route::get('/admin/fishes', [AdminController::class, 'fishIndex'])->name('admin.fishes.index');
 Route::get('/admin/user-results', [AdminController::class, 'resultIndex'])->name('admin.user-results.index');
+Route::get('/admin/varieties', [AdminController::class, 'varietyIndex'])->name('admin.varieties.index');
 
 
 Route::post('/admin/food/create', [AdminController::class, 'storeFood'])->name('admin.food.store');
@@ -49,3 +50,8 @@ Route::put('/admin/ikan/{id}/soft-delete', [AdminController::class, 'softDeleteI
 Route::put('/admin/ikan/{id}/recover', [AdminController::class, 'recoverIkan'])->name('admin.ikan.recover');
 Route::put('/admin/ikan/{id}/verify', [AdminController::class, 'verifyIkan'])->name('admin.ikan.verify');
 
+
+Route::post('/admin/varieties/create', [AdminController::class, 'storeVariety'])->name('admin.varieties.store');
+Route::put('/admin/varieties/{id}', [AdminController::class, 'updateVariety'])->name('admin.varieties.update');
+Route::put('/admin/varieties/{id}/soft-delete', [AdminController::class, 'softDeleteVariety'])->name('admin.varieties.softDelete');
+Route::put('/admin/varieties/{id}/recover', [AdminController::class, 'recoverVariety'])->name('admin.varieties.recover');

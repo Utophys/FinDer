@@ -42,6 +42,9 @@
                 <a href="/admin/user-results" class="bg-green-500 text-white px-4 mb-4 py-2 rounded hover:bg-green-600 transition">
                     Kelola History
                 </a>
+                <a href="/admin/varieties" class="bg-green-500 text-white px-4 mb-4 py-2 rounded hover:bg-green-600 transition">
+                    Kelola Varietas Ikan
+                </a>
             </div>
         </div>
 
@@ -49,16 +52,10 @@
         <!-- Konten kanan -->
         <div class="bg-[#0E87CC] w-[70%] h-full overflow-y-auto p-8 text-white">
 
-            {{-- Header (jika ada) --}}
-            @include('partials.header')
-
             {{-- Konten utama halaman --}}
             <main>
                 @yield('content')
             </main>
-
-            {{-- Footer --}}
-            @include('partials.footer')
 
         </div>
     </div>
