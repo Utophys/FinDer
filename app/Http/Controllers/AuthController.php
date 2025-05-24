@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Socialite\Facades\Socialite;
-
+use Illuminate\Http\RedirectResponse;
 
 class AuthController extends Controller
 {
@@ -104,6 +104,23 @@ class AuthController extends Controller
         return redirect()->route('auth.show')
             ->with('success', 'Registrasi Berhasil!.')
             ->with('active_panel', 'login');
+    }
+
+    public function logout(Request $request): RedirectResponse
+    {
+        $user = Auth::user();
+
+        if ($user) {
+            $user->remember_token = null;
+            $user->save();
+        }
+
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/'); // atau route tujuan setelah logout
     }
 
     public function redirectToGoogle()

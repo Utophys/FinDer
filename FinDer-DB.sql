@@ -269,7 +269,7 @@ INSERT INTO `result_detail` (`RESULT_DETAIL_ID`, `RANKING`, `RESULT_ID`, `FISH_I
 
 CREATE TABLE `sessions` (
   `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `user_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `ip_address` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `user_agent` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -395,6 +395,9 @@ ALTER TABLE `sessions`
 ALTER TABLE `user_account`
   ADD PRIMARY KEY (`USER_ID`),
   ADD UNIQUE KEY `EMAIL` (`EMAIL`);
+
+ALTER TABLE user_account ADD remember_token VARCHAR(100) NULL;
+
 
 --
 -- AUTO_INCREMENT for dumped tables

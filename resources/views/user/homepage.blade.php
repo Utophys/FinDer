@@ -36,5 +36,10 @@
         <h1>Welcome to Your Homepage</h1>
         <p>This is a placeholder page. You are logged in.</p>
     </div>
+    <form action="{{ route('logout') }}" method="POST">
+    @csrf
+    <button type="submit">Logout</button>
+</form>
+
 </body>
 </html>

@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
@@ -20,16 +21,14 @@ Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallbac
 
 // login register
 Route::middleware(['guest'])->group(function () {
+    Route::get('/login', [AuthController::class, 'login'])->name('login.form');
     Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/register', [AuthController::class, 'register'])->name('register');
 });
 
-// Route::post('/logout', function () {
-//     auth()->logout();
-//     return redirect('/auth');
-// })->name('logout')->middleware('auth');
-
-
+Route::middleware(['auth'])->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
 
 
 Route::get('/admin/foods', [AdminController::class, 'foodIndex'])->name('admin.foods.index');

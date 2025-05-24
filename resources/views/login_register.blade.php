@@ -95,7 +95,7 @@
 
                     <label class="block text-sm font-medium text-gray-700 mb-1 text-left">Password</label>
                     <div class="relative mb-6">
-                        <input type="password" id="login-password" placeholder="Your password" class="w-full p-3 border rounded pr-10"/>
+                        <input type="password" name="password" id="login-password" placeholder="Your password" class="w-full p-3 border rounded pr-10" />
                         <span id="login-password-toggle" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer hidden" onclick="togglePassword('login-password')">
                             <svg id="login-password-eye-slash" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-500">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
@@ -174,7 +174,7 @@
 
                     <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
                     <div class="relative mb-4">
-                        <input type="password" id="register-password" placeholder="Your Password" class="w-full p-3 border rounded pr-10"/>
+                        <input type="password" name="password" placeholder="Your Password" class="w-full p-3 border rounded pr-10" />
                         <span id="register-password-toggle" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer hidden" onclick="toggleRegisterPasswords()">
                             <svg id="register-password-eye-slash" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-500">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
@@ -191,7 +191,7 @@
 
                     <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
                     <div class="relative mb-6">
-                        <input type="password" id="register-confirm-password" placeholder="Confirm Password" class="w-full p-3 border rounded pr-10"/>
+                        <input type="password" name="password_confirmation" id="register-confirm-password" placeholder="Confirm Password" class="w-full p-3 border rounded pr-10" />
                         <span id="register-confirm-password-toggle" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer hidden" onclick="toggleRegisterPasswords()">
                             <svg id="register-confirm-password-eye-slash" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-500">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
