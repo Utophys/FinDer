@@ -30,6 +30,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
+//about-us
+Route::get('/about-us', function () {
+    return view('about-us');
+})->name('about-us');
 
 Route::get('/admin/foods', [AdminController::class, 'foodIndex'])->name('admin.foods.index');
 Route::get('/admin/fishes', [AdminController::class, 'fishIndex'])->name('admin.fishes.index');
