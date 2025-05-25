@@ -13,7 +13,7 @@ class AlternativeFish extends Model
 
     protected $keyType = 'string'; // penting karena UUID adalah string
 
-    protected $fillable = ['FISH_ID', 'NAME', 'DESCRIPTION', 'FOOD_ID', 'IMAGE'];
+    protected $fillable = ['FISH_ID', 'NAME', 'DESCRIPTION', 'FOOD_ID', 'IMAGE', 'IS_VERIFIED', 'IS_DELETED'];
 
     protected static function boot()
     {

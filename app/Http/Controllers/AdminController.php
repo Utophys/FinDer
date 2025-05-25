@@ -74,6 +74,7 @@ class AdminController extends Controller
             'NAME' => $request->NAME,
             'DESCRIPTION' => $request->DESCRIPTION,
             'IMAGE' => $imageName,
+            'IS_DELETED' => 0,
             // tambahkan kolom lain jika ada
         ]);
 
@@ -156,6 +157,7 @@ class AdminController extends Controller
             'DESCRIPTION' => $request->DESCRIPTION,
             'IMAGE' => $image->hashName(),
             'FOOD_ID' => $request->FOOD_ID,
+            'IS_VERIFIED' => 0,
             'IS_DELETED' => 0,
         ]);
 
