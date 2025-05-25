@@ -13,7 +13,7 @@ class Food extends Model
     public $keyType = 'string';
     public $timestamps = false;
 
-    protected $fillable = ['FOOD_ID', 'NAME', 'DESCRIPTION', 'IMAGE'];
+    protected $fillable = ['FOOD_ID', 'NAME', 'DESCRIPTION', 'IMAGE', 'IS_DELETED'];
 
     protected static function boot()
     {

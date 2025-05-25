@@ -13,7 +13,7 @@ class Variety extends Model
     public $keyType = 'string';
     public $timestamps = false;
 
-    protected $fillable = ['FISH_VARIETY_ID', 'VARIETY_NAME', 'DESCRIPTION', 'FISH_ID', 'IMAGE'];
+    protected $fillable = ['FISH_VARIETY_ID', 'VARIETY_NAME', 'DESCRIPTION', 'FISH_ID', 'IMAGE', 'IS_DELETED'];
 
     protected static function boot()
     {
