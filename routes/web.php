@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\MooraDemoController;
 use Illuminate\Support\Facades\Route;
 
 // default route
@@ -34,6 +35,10 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/about-us', function () {
     return view('about-us');
 })->name('about-us');
+
+Route::get('/moorademo', [MooraDemoController::class, 'index'])->name('moorademo');
+Route::post('/moorademo/store', [MooraDemoController::class, 'storeResult'])->name('moorademo.store');
+
 
 Route::get('/admin/foods', [AdminController::class, 'foodIndex'])->name('admin.foods.index');
 Route::get('/admin/fishes', [AdminController::class, 'fishIndex'])->name('admin.fishes.index');

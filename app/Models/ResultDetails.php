@@ -12,7 +12,7 @@ class ResultDetails extends Model
     public $keyType = 'string';
     public $timestamps = false;
 
-    protected $fillable = ['RESULT_DETAIL_ID', 'RANK', 'RESULT_ID', 'FISH_ID'];
+    protected $fillable = ['RESULT_DETAIL_ID', 'RANKING', 'RESULT_ID', 'FISH_ID','SCORE'];
 
     protected static function boot()
     {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 25, 2025 at 07:43 AM
+-- Generation Time: May 25, 2025 at 01:45 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.3.19
 
@@ -316,10 +316,30 @@ CREATE TABLE `master_criteria` (
   `MASTER_CRITERIA_ID` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `USER_ID` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `CRITERIA_ID` varchar(10) DEFAULT NULL,
-  `WEIGHT_TXT` varchar(20) DEFAULT NULL,
+  `WEIGHT_TXT` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `WEIGHT_INT` int DEFAULT NULL,
   `RESULT_ID` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `master_criteria`
+--
+
+INSERT INTO `master_criteria` (`MASTER_CRITERIA_ID`, `USER_ID`, `CRITERIA_ID`, `WEIGHT_TXT`, `WEIGHT_INT`, `RESULT_ID`) VALUES
+('152bfd99-2ae1-4452-b2d0-11f78cecd5ee', 'USR00001', 'CRT00001', 'Tidak Penting', 1, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822'),
+('3980c74f-09f3-4421-a2c7-3f872f31bd2a', 'USR00001', 'CRT00007', 'Sangat Penting', 4, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822'),
+('39a1098e-c72c-4dec-ab13-81150068cd94', 'USR00001', 'CRT00005', 'Sangat Penting', 4, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a'),
+('3c720aed-318f-4a28-9345-98d0c3681cf1', 'USR00001', 'CRT00005', 'Sangat Penting', 4, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822'),
+('3e976839-f850-4824-a223-f0be4bdff508', 'USR00001', 'CRT00004', 'Tidak Penting', 1, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822'),
+('4f177377-c4aa-4ce3-a32d-1d0f5b8a3e6d', 'USR00001', 'CRT00003', 'Tidak Penting', 1, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a'),
+('502e1640-ebb1-4a4c-9874-7090ee1c04e8', 'USR00001', 'CRT00003', 'Tidak Penting', 1, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822'),
+('7006b169-f820-47fd-b5bb-a93014adf923', 'USR00001', 'CRT00001', 'Tidak Penting', 1, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a'),
+('74547619-714f-454d-a6b9-8cb72a9493b4', 'USR00001', 'CRT00002', 'Tidak Penting', 1, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a'),
+('a72975a1-16f4-42c2-a7c7-c84d6a7dc65b', 'USR00001', 'CRT00006', 'Sangat Penting', 4, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a'),
+('d1bd5c01-28b5-4b6e-87fe-df8db772ba6f', 'USR00001', 'CRT00002', 'Tidak Penting', 1, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822'),
+('d9dae572-00c7-4749-9acb-79494578ced9', 'USR00001', 'CRT00004', 'Tidak Penting', 1, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a'),
+('e38d4b16-70fb-49bc-be6c-e73436b48c9f', 'USR00001', 'CRT00006', 'Sangat Penting', 4, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822'),
+('f06ebcfc-198f-476e-b8ea-bb96c1d552db', 'USR00001', 'CRT00007', 'Tidak Penting', 1, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a');
 
 -- --------------------------------------------------------
 
@@ -333,6 +353,14 @@ CREATE TABLE `result` (
   `USER_ID` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Dumping data for table `result`
+--
+
+INSERT INTO `result` (`RESULT_ID`, `TIME_ADDED`, `USER_ID`) VALUES
+('1bb1a886-7b01-4b28-bf40-f7a2ad1cd822', '2025-05-25 13:42:09', 'USR00001'),
+('d2d17808-df28-42aa-bff8-3e8fbcbca43a', '2025-05-25 13:43:57', 'USR00001');
+
 -- --------------------------------------------------------
 
 --
@@ -343,8 +371,53 @@ CREATE TABLE `result_detail` (
   `RESULT_DETAIL_ID` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `RANKING` int DEFAULT NULL,
   `RESULT_ID` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `FISH_ID` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
+  `FISH_ID` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `SCORE` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `result_detail`
+--
+
+INSERT INTO `result_detail` (`RESULT_DETAIL_ID`, `RANKING`, `RESULT_ID`, `FISH_ID`, `SCORE`) VALUES
+('018bb1a2-389e-4263-a0b2-ca28f0f32601', 17, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822', 'f22cf792-5938-4a35-8e03-8f05c35dc672', 1.3554614243399),
+('08d3101f-f9bd-43ba-8978-42faa9ea7745', 14, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a', 'dc440c9a-caec-4ab3-b37a-319c2ac4b1fc', 0.93921505119496),
+('0cb62b73-432e-4bf9-b23c-3147cb0c604e', 9, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822', 'cd9eec41-c24f-42e2-866b-ea4d1cc70f87', 1.795892039722),
+('0e55d549-2d62-48b3-bf7c-f4ac297f75eb', 9, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a', 'cd9eec41-c24f-42e2-866b-ea4d1cc70f87', 1.1076448381103),
+('113ce7f9-e9e4-4287-ba72-d32d34fca407', 10, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822', '2ea7634a-3c0f-4e1a-8814-f6c4a2754e86', 1.6978339721529),
+('14ce3014-84c3-4d45-896f-0d3a0a8fd99c', 10, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a', 'fed6cbc1-bce9-4778-a511-ada651bc848d', 1.0369507783085),
+('1af3f66d-17c6-4d8c-bcc3-0f614f108aef', 17, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a', 'f22cf792-5938-4a35-8e03-8f05c35dc672', 0.66721422272826),
+('1c9f163f-8eb3-4bd3-ad7e-3cd4dbd477a7', 1, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822', '2ca10b74-ec5e-4eff-9058-47dbcf484c7f', 2.3972626117261),
+('25927346-230e-4ef6-a184-5ffb628ba682', 8, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822', 'b3730910-8a6a-4a56-8b30-c69d1d398c75', 1.8051954195793),
+('2c32c5b8-8bba-4ac5-bb93-96744750a4b4', 19, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a', '001823ac-4140-4fda-8072-75d0985c3cf4', 0.30204092063555),
+('30d8eaaa-ede6-41c1-a1c4-5e90a806080b', 13, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822', 'fc969dbb-92c5-4f8b-a2c4-d5e3cb13e1bb', 1.686783094604),
+('427bf809-68f4-4578-b3d7-9fa40c672be4', 16, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a', '367b9705-6ee7-47e7-8ac6-b351eea26f92', 0.82368357367753),
+('44968755-e798-4915-9139-e38f82493984', 15, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822', 'dc7e1a15-a1b7-4d0f-8163-adfc343a4f3f', 1.5506680010609),
+('4a9e5391-7b5a-4086-ae3b-877d04ef0965', 14, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822', 'dc440c9a-caec-4ab3-b37a-319c2ac4b1fc', 1.6274622528066),
+('4e75bece-2a8f-4928-8ddb-0a8d3b7627e1', 19, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822', '001823ac-4140-4fda-8072-75d0985c3cf4', 0.76087238837667),
+('5873c394-f2f9-4484-9e00-2038303fd417', 6, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822', 'a329fe9f-684b-4f08-94d6-1deac127a877', 2.0123624322664),
+('66a8faa8-4abe-4b6e-ada7-66121594b683', 5, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a', 'd90a003a-bf1d-43ea-ade2-b169a69f49db', 1.3770135400526),
+('7ed7b200-358a-4038-920d-ba2163c6cc83', 16, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822', '367b9705-6ee7-47e7-8ac6-b351eea26f92', 1.5119307752892),
+('8269f5cd-586b-4a01-9125-4c5e43332a4d', 4, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822', 'a8df3466-1a7a-43e3-9e3d-ff9fa1f27c11', 2.1050952305105),
+('847c216d-86f9-46a1-bc03-fbc9d0ec949b', 3, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822', '9fc22164-5424-4cf6-82b9-d6bcd2aa35a4', 2.1144804264075),
+('94e05f20-1df5-491b-bc8b-c9b91c3cd51e', 11, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a', '2ea7634a-3c0f-4e1a-8814-f6c4a2754e86', 1.0095867705412),
+('97468360-5933-4e37-9d5a-dff27efca468', 5, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822', 'd90a003a-bf1d-43ea-ade2-b169a69f49db', 2.0652607416643),
+('a06872a7-38d2-43b5-a732-24b4e8700d7b', 6, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a', 'a329fe9f-684b-4f08-94d6-1deac127a877', 1.3241152306547),
+('a394228c-3b78-4140-a3a7-525c2c302dee', 15, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a', 'dc7e1a15-a1b7-4d0f-8163-adfc343a4f3f', 0.86242079944925),
+('b1f73036-1675-4a4c-a257-b53e2a953c99', 7, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822', 'fed6cbc1-bce9-4778-a511-ada651bc848d', 1.9546137137908),
+('b36c37d1-bffb-4400-859b-f496a1083cab', 12, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a', 'f7be6d0c-31f0-4d2b-9511-27022a826a84', 1.0028011591147),
+('b56b2159-f387-4720-9fee-8dfee0d44c1f', 3, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a', 'b6e6999e-0063-4608-93cd-9c9420b6c7e5', 1.4611237260423),
+('b9d637d2-d80d-4d29-be07-5ea47ba9c53c', 11, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822', 'f7be6d0c-31f0-4d2b-9511-27022a826a84', 1.6910483607264),
+('be7b06ff-2154-4903-a888-0c30c321d12d', 8, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a', 'b3730910-8a6a-4a56-8b30-c69d1d398c75', 1.1169482179676),
+('c148b27f-c4f9-4d1c-9e18-245d3fe9162e', 13, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a', 'fc969dbb-92c5-4f8b-a2c4-d5e3cb13e1bb', 0.99853589299233),
+('c2a80271-e5b7-47a9-9bfd-89502ada6cf0', 12, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822', 'b6e6999e-0063-4608-93cd-9c9420b6c7e5', 1.6905394599129),
+('dd6b2a8e-8cab-4c7f-894c-6c1c4f007f1b', 1, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a', 'b6202190-87df-44d5-9ec1-09f92f0e41aa', 1.7452375102669),
+('e00096c2-f697-4800-b9a2-cf35614cb90e', 2, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a', '2ca10b74-ec5e-4eff-9058-47dbcf484c7f', 1.7090154101145),
+('ebede262-4431-4bcc-b68a-f74083fecb36', 18, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a', '5e8bda67-0500-47e9-a68f-3bd50f7238d7', 0.36183662268026),
+('f9f41a0f-4424-4cdc-bd61-e863b6f21c59', 7, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a', 'a8df3466-1a7a-43e3-9e3d-ff9fa1f27c11', 1.1874322950282),
+('fa28bdc7-43cc-470e-b2cf-39fe902829f9', 2, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822', 'b6202190-87df-44d5-9ec1-09f92f0e41aa', 2.204068978008),
+('fb30dccf-9257-48ac-a76c-6b96233889c0', 4, 'd2d17808-df28-42aa-bff8-3e8fbcbca43a', '9fc22164-5424-4cf6-82b9-d6bcd2aa35a4', 1.4262332247958),
+('fbecbcaa-ba57-4e90-8351-3741d3beede9', 18, '1bb1a886-7b01-4b28-bf40-f7a2ad1cd822', '5e8bda67-0500-47e9-a68f-3bd50f7238d7', 0.82066809042138);
 
 -- --------------------------------------------------------
 
@@ -366,10 +439,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('7ZAYbORI05mqil2SOj1c2dsqEcXizx212l5YtqFG', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoidHVESmdLRnhHVHZCYWJPU3B0NDdjUDk5MU9IOHlybjZsd2N5eXRQbyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mzc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbi92YXJpZXRpZXMiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1748157456),
-('eDmFyIQ4uPcXDSjm44aDG18sJmdR92wbXU041Ahh', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiV0lHc1JYMnFWUGFPZ05lR2FxSmhhczhQQnlobFVBNjFobkk4TFV1SiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzQ6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbi9maXNoZXMiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1748158420),
-('PiT0gWsLTZaOBflew4Sm29gwqDLWufZbmHgBzzav', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiU1lQckl0a1ZDUDBoaWFVZkNBdTlkMGJJUDhwRURwMXNPMWlCcUxMdyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fX0=', 1747807896),
-('WGJ3o2LiGCOhWLHQRDX4jR4TcamGu0MmNzk56ore', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiSTdUcHBQamtMS2xMaTZYTlJaVGVPOWVmOG5jY3oxaTVsWU1pUHZzaCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mzc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbi92YXJpZXRpZXMiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1748145476);
+('K11BUXWIZttTgCurhDLgRybDIYf9fNxX8QBe6vVh', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiQ1Z2RW5qNkNXRzVHaEViVzE3SG5sYVJvdU9LUVNVb1ZTVjRuT0ZrdyI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9tb29yYWRlbW8iO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1748180637);
 
 -- --------------------------------------------------------
 
