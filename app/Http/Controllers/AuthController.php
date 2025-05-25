@@ -23,12 +23,14 @@ class AuthController extends Controller
         return view('login_register', compact('activePanel'));
     }
 
-
+    // fungsi login
     public function login(Request $request)
-    {
+    {   
+        // inisialisasi validator
         $credentials = $request->only('email', 'password');
         $remember = $request->has('remember');
 
+        // exception handling input user kalo ga cocok
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
@@ -38,6 +40,7 @@ class AuthController extends Controller
             'password.required' => 'Password wajib diisi.',
         ]);
 
+        // kalo ga sesuai, redirect ke login
         if ($validator->fails()) {
             return redirect()->route('auth.show')
                 ->withErrors($validator, 'login')
@@ -45,17 +48,26 @@ class AuthController extends Controller
                 ->with('active_panel', 'login');
         }
 
+        // ngecek kredensial dan ngecek remember me token
         if (Auth::attempt($credentials, $remember)) {
+            $user = Auth::user();
+
+            // kalo admin
+            if ($user->ROLE === 'admin') {
+                return redirect()->route('admin.fishes.index');
+            }
+
             return redirect()->intended('homepage');
         }
 
-
+        // kalo gagal login
         return redirect()->route('auth.show')
             ->withErrors(['email' => 'Email atau Password yang anda isi salah!'], 'login')
             ->withInput()
             ->with('active_panel', 'login');
     }
 
+    // fungsi register
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -120,7 +132,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/'); // atau route tujuan setelah logout
+        return redirect('/'); 
     }
 
     public function redirectToGoogle()
