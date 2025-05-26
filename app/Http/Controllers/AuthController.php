@@ -22,9 +22,7 @@ class AuthController extends Controller
                 return redirect()->route('admin.fishes.index');
             }
 
-            elseif ($user->ROLE === 'user'){
-                return redirect()->intended('homepage');
-            }
+            return redirect()->route('homepage');
         }
 
         $activePanel = session('active_panel', 'login');
@@ -65,9 +63,7 @@ class AuthController extends Controller
                 return redirect()->route('admin.fishes.index');
             }
 
-            elseif ($user->ROLE === 'user'){
-                return redirect()->intended('homepage');
-            }
+            return redirect()->route('homepage');
         }
 
         // kalo gagal login
@@ -167,12 +163,13 @@ class AuthController extends Controller
                     'ROLE' => 'user',
                     'IMAGE' => $googleUser->getAvatar(),
                     'IS_DELETED' => 0,
+
                 ]);
             }
 
             Auth::login($user, true);
 
-            return redirect()->intended('homepage');
+            return redirect()->intended('/user/homepage');
         } catch (\Exception $e) {
             return redirect()->route('login')->withErrors(['email' => 'Google login failed.']);
         }
