@@ -28,7 +28,12 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/homepage', [HomeController::class, 'index'])->name('homepage');
     Route::post('/logout', [AuthController::class, 'logout'])->name('user.logout');
     Route::get('/fish/{id}', [FishController::class, 'show'])->name('user.fish_detail');
-  
+    Route::get('/dss', function () {
+        // Pastikan file 'kuesioner.blade.php' ada di resources/views/
+        return view('user.dss');
+    })->name('user.dss');
+    Route::post('/dss/store-result', [MooraDemoController::class, 'storeResult'])->name('user.dss.storeResult');
+    Route::get('/dss/results/{result_id}', [MooraDemoController::class, 'show'])->name('user.dss.showResult');
 });
 
 // Public about page

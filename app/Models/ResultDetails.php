@@ -45,6 +45,6 @@ class ResultDetails extends Model
     // Scope untuk urutkan berdasarkan peringkat (rank)
     public function scopeOrdered($query)
     {
-        return $query->orderBy('RANK', 'asc');
+        return $query->orderBy('RANKING', 'asc');
     }
 }
