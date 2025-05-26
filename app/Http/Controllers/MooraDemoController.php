@@ -13,6 +13,7 @@ use App\Models\ResultDetails;
 use App\Models\MasterAlternative;
 use App\Models\MasterCriteria;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -126,12 +127,155 @@ class MooraDemoController extends Controller
             }
 
             DB::commit();
-            return redirect()->back()->with('success', 'Data berhasil disimpan dan dihitung.');
+            return redirect()->route('user.dss.showResult', ['result_id' => $result->RESULT_ID])
+                ->with('success', 'Kuesioner berhasil diproses! Berikut adalah hasilnya.');
+
 
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+
+    public function show($result_id)
+    {
+        // --------- 1. Ambil Data Dasar ---------
+        $result = Results::find($result_id);
+        if (!$result) {
+            return redirect()->route('user.dss') // Ganti dengan route kuesioner Anda
+                ->with('error', 'Data hasil tidak ditemukan.');
+        }
+
+        // Ambil bobot yang digunakan pengguna untuk hasil ini
+        $userCriteriaWeights = MasterCriteria::where('RESULT_ID', $result_id)
+            ->pluck('WEIGHT_INT', 'CRITERIA_ID')
+            ->all();
+
+        if (empty($userCriteriaWeights)) {
+            return redirect()->route('user.dss')
+                ->with('error', 'Data bobot kriteria untuk hasil ini tidak ditemukan.');
+        }
+
+        $allCriteria = Criteria::orderBy('CRITERIA_ID')->get(); // Urutkan agar konsisten
+        $allAlternatives = AlternativeFish::orderBy('FISH_ID')->get(); // Urutkan agar konsisten, pastikan model ini ada
+        $masterAlternativesData = MasterAlternative::all();
+
+        // --------- 2. Bangun Matriks Keputusan Awal (Xij) ---------
+        // Format: $initialMatrix[FISH_ID][CRITERIA_ID] = VALUE
+        $initialMatrix = [];
+        foreach ($allAlternatives as $alt) {
+            foreach ($allCriteria as $crit) {
+                $masterValue = $masterAlternativesData
+                    ->where('FISH_ID', $alt->FISH_ID)
+                    ->where('CRITERIA_ID', $crit->CRITERIA_ID)
+                    ->first();
+                $initialMatrix[$alt->FISH_ID][$crit->CRITERIA_ID] = $masterValue ? $masterValue->VALUE : 0;
+            }
+        }
+
+        // --------- 3. Hitung Pembagi untuk Normalisasi (Akar dari Jumlah Kuadrat) ---------
+        // Format: $denominatorSquares[CRITERIA_ID] = sqrt(sum(Xij^2))
+        $denominatorSquares = [];
+        foreach ($allCriteria as $crit) {
+            $sumOfSquares = 0;
+            foreach ($allAlternatives as $alt) {
+                $value = $initialMatrix[$alt->FISH_ID][$crit->CRITERIA_ID] ?? 0;
+                $sumOfSquares += pow($value, 2);
+            }
+            $denominatorSquares[$crit->CRITERIA_ID] = sqrt($sumOfSquares);
+        }
+
+        // --------- 4. Hitung Matriks Ternormalisasi (X*ij) ---------
+        // Format: $normalizedMatrix[FISH_ID][CRITERIA_ID] = Xij / Denominator
+        $normalizedMatrix = [];
+        foreach ($allAlternatives as $alt) {
+            foreach ($allCriteria as $crit) {
+                $value = $initialMatrix[$alt->FISH_ID][$crit->CRITERIA_ID] ?? 0;
+                $denominator = $denominatorSquares[$crit->CRITERIA_ID] ?? 1; // Hindari pembagian dengan 0
+                $normalizedMatrix[$alt->FISH_ID][$crit->CRITERIA_ID] = $denominator ? $value / $denominator : 0;
+            }
+        }
+
+        // --------- 5. Hitung Matriks Ternormalisasi Terbobot (Yij) ---------
+        // Format: $weightedNormalizedMatrix[FISH_ID][CRITERIA_ID] = X*ij * Wj
+        $weightedNormalizedMatrix = [];
+        foreach ($allAlternatives as $alt) {
+            foreach ($allCriteria as $crit) {
+                $normalizedValue = $normalizedMatrix[$alt->FISH_ID][$crit->CRITERIA_ID] ?? 0;
+                $weight = $userCriteriaWeights[$crit->CRITERIA_ID] ?? 0;
+                $weightedNormalizedMatrix[$alt->FISH_ID][$crit->CRITERIA_ID] = $normalizedValue * $weight;
+            }
+        }
+
+        // --------- 6. Hitung Jumlah Benefit dan Cost untuk Setiap Alternatif ---------
+        // Format: $benefitCostSums[FISH_ID] = ['benefit' => sum, 'cost' => sum]
+        $benefitCostSums = [];
+        foreach ($allAlternatives as $alt) {
+            $sumBenefit = 0;
+            $sumCost = 0;
+            foreach ($allCriteria as $crit) {
+                $weightedValue = $weightedNormalizedMatrix[$alt->FISH_ID][$crit->CRITERIA_ID] ?? 0;
+                if (strtolower($crit->TYPE) === 'benefit') {
+                    $sumBenefit += $weightedValue;
+                } else { // Cost
+                    $sumCost += $weightedValue;
+                }
+            }
+            $benefitCostSums[$alt->FISH_ID] = [
+                'benefit' => $sumBenefit,
+                'cost' => $sumCost,
+            ];
+        }
+
+        // --------- 7. Ambil Hasil Akhir (Skor dan Peringkat) dari Database ---------
+        // Ini sudah ada dari kode Anda sebelumnya
+        $rankedFishDetails = ResultDetails::with('fish')
+            ->byResult($result_id)
+            ->ordered()
+            ->get();
+
+        if ($rankedFishDetails->isEmpty()) {
+            return redirect()->route('user.dss')
+                ->with('error', 'Detail hasil rekomendasi tidak ditemukan.');
+        }
+
+        $top1FishDetail = $rankedFishDetails->first();
+        $otherConsiderations = $rankedFishDetails->slice(1, 4);
+
+        // --------- 8. Siapkan data untuk dikirim ke view ---------
+        $calculationData = [
+            'userWeights' => $userCriteriaWeights,
+            'allCriteria' => $allCriteria, // Untuk nama dan tipe kriteria
+            'allAlternatives' => $allAlternatives, // Untuk nama alternatif
+            'initialMatrix' => $initialMatrix,
+            'denominatorSquares' => $denominatorSquares,
+            'normalizedMatrix' => $normalizedMatrix,
+            'weightedNormalizedMatrix' => $weightedNormalizedMatrix,
+            'benefitCostSums' => $benefitCostSums,
+            'rankedFishDetails' => $rankedFishDetails // Mengandung skor akhir dan peringkat
+        ];
+
+        return view('user.dssresult', [ // Path ke view Anda
+            'top1FishDetail' => $top1FishDetail,
+            'otherConsiderations' => $otherConsiderations,
+            'calculationData' => $calculationData, // Kirim data kalkulasi
+            'resultId' => $result_id // Kirim juga result_id jika diperlukan di view
+        ]);
+    }
+
+    // Opsional: Method untuk mengambil hasil terbaru pengguna yang login
+    public function showLatest()
+    {
+        $latestResult = Results::where('USER_ID', Auth::id())
+            ->orderBy('TIME_ADDED', 'desc')
+            ->first();
+
+        if (!$latestResult) {
+            return redirect()->route('user.dss') // Ganti dengan route kuesioner Anda
+                ->with('error', 'Anda belum pernah mengisi kuesioner.');
+        }
+        // Redirect ke method show dengan RESULT_ID terbaru
+        return redirect()->route('user.dss.showResult', ['result_id' => $latestResult->RESULT_ID]);
     }
 
 
