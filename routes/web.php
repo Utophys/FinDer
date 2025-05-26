@@ -26,8 +26,9 @@ Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallbac
 // Authenticated user routes
 Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/homepage', [HomeController::class, 'index'])->name('homepage');
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('user.logout');
     Route::get('/fish/{id}', [FishController::class, 'show'])->name('user.fish_detail');
+  
 });
 
 // Public about page
@@ -58,5 +59,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::put('/varieties/{id}', [AdminController::class, 'updateVariety'])->name('admin.varieties.update');
     Route::put('/varieties/{id}/soft-delete', [AdminController::class, 'softDeleteVariety'])->name('admin.varieties.softDelete');
     Route::put('/varieties/{id}/recover', [AdminController::class, 'recoverVariety'])->name('admin.varieties.recover');
+
+    Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
+
 });
 
