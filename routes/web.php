@@ -24,7 +24,7 @@ Route::get('/auth/google/redirect', [AuthController::class, 'redirectToGoogle'])
 Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->name('google.callback');
 
 // Authenticated user routes
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/homepage', [HomeController::class, 'index'])->name('homepage');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/fish/{id}', [FishController::class, 'show'])->name('user.fish_detail');
@@ -32,6 +32,9 @@ Route::middleware('auth')->group(function () {
 
 // Public about page
 Route::get('/about-us', fn() => view('about-us'))->name('about-us');
+
+Route::get('/moorademo', [MooraDemoController::class, 'index'])->name('moorademo');
+Route::post('/moorademo/store', [MooraDemoController::class, 'storeResult'])->name('moorademo.store');
 
 // Admin routes protected by auth + admin middleware
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {

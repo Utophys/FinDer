@@ -16,7 +16,15 @@ class AuthController extends Controller
     public function show()
     {
         if (auth()->check()) {
-            return redirect('/homepage');
+            $user = Auth::user();
+
+            if ($user->ROLE === 'admin') {
+                return redirect()->route('admin.fishes.index');
+            }
+
+            elseif ($user->ROLE === 'user'){
+                return redirect()->intended('homepage');
+            }
         }
 
         $activePanel = session('active_panel', 'login');
@@ -57,7 +65,9 @@ class AuthController extends Controller
                 return redirect()->route('admin.fishes.index');
             }
 
-            return redirect()->intended('homepage');
+            elseif ($user->ROLE === 'user'){
+                return redirect()->intended('homepage');
+            }
         }
 
         // kalo gagal login
