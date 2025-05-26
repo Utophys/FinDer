@@ -27,11 +27,9 @@
             <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black no-underline">
                 View Profile
             </a>
-            <form method="POST" action="{{ route('logout') }}">
+            <form method="POST" action="{{ route('user.logout') }}">
                 @csrf
-                <button type="submit" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                    Logout
-                </button>
+                <button type="submit">Logout</button>
             </form>
             @else
             <a href="{{ route('auth.show') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black no-underline">
