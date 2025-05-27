@@ -24,9 +24,7 @@
         <div x-show="open" @click.outside="open = false" x-transition
             class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-50">
             @auth
-            <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black no-underline">
-                View Profile
-            </a>
+            
             <form method="POST" action="{{ route('user.logout') }}">
                 @csrf
                 <button type="submit">Logout</button>

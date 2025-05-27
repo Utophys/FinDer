@@ -6,6 +6,14 @@ use App\Http\Controllers\MooraDemoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FishController;
+use App\Http\Controllers\PasswordResetController;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendEmail;
+
+
 
 // Redirect root to auth page
 Route::get('/', fn() => redirect('/auth'));
@@ -28,7 +36,8 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/homepage', [HomeController::class, 'index'])->name('homepage');
     Route::post('/logout', [AuthController::class, 'logout'])->name('user.logout');
     Route::get('/fish/{id}', [FishController::class, 'show'])->name('user.fish_detail');
-  
+
+    Route::post('/send-password-reset-link', [PasswordResetController::class, 'sendCustomResetLink'])->name('user.reset_password_send');
 });
 
 // Public about page
@@ -61,6 +70,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::put('/varieties/{id}/recover', [AdminController::class, 'recoverVariety'])->name('admin.varieties.recover');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
-
 });
 
+Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');

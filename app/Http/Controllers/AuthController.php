@@ -113,6 +113,7 @@ class AuthController extends Controller
             'USERNAME' => $request->name,
             'DISPLAY_NAME' => $request->name,
             'PASSWORD' => Hash::make($request->password),
+            'SET_PASSWORD' => 1,
             'ROLE' => 'user',
             'EMAIL' => $request->email,
             'IMAGE' => '',
@@ -160,6 +161,7 @@ class AuthController extends Controller
                     'DISPLAY_NAME' => $googleUser->getName(),
                     'EMAIL' => $googleUser->getEmail(),
                     'PASSWORD' => Hash::make(Str::random(16)),
+                    'SET_PASSWORD' => 0,
                     'ROLE' => 'user',
                     'IMAGE' => $googleUser->getAvatar(),
                     'IS_DELETED' => 0,
@@ -174,4 +176,5 @@ class AuthController extends Controller
             return redirect()->route('login')->withErrors(['email' => 'Google login failed.']);
         }
     }
+
 }

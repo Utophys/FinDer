@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AlternativeFish;
 
@@ -13,6 +12,9 @@ class HomeController extends Controller
         if (!Auth::check()) {
             return redirect()->route('auth.show');
         }
+
+        $user = Auth::user();
+        $showPasswordAlert = Auth::user()->SET_PASSWORD == 0;
 
         $randomFish = AlternativeFish::query()
             ->whereNotNull('IMAGE')
@@ -32,6 +34,6 @@ class HomeController extends Controller
             ->limit(12)
             ->get();
 
-        return view('user.homepage', compact('randomFish', 'alternativeFishes'));
+        return view('user.homepage', compact('randomFish', 'alternativeFishes', 'showPasswordAlert'));
     }
 }

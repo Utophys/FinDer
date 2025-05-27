@@ -552,7 +552,11 @@ ALTER TABLE `sessions`
 --
 ALTER TABLE `user_account`
   ADD PRIMARY KEY (`USER_ID`),
-  ADD UNIQUE KEY `EMAIL` (`EMAIL`);
+  ADD UNIQUE KEY `EMAIL` (`EMAIL`),
+  ADD COLUMN `SET_PASSWORD` BOOLEAN DEFAULT FALSE AFTER `PASSWORD`;
+
+
+
 
 --
 -- Constraints for dumped tables
