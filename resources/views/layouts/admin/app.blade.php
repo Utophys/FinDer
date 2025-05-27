@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,63 +7,97 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-
-
-    {{-- Tambahkan CSS atau meta lainnya di sini --}}
+    <style>
+        .active {
+            background-color: #0E87CC;
+            color: white;
+        }
+        .active img {
+            filter: brightness(0) invert(1); /* Changes icon to white */
+        }
+        .active:hover {
+            background-color: #0A6CA3;
+        }
+        .active:hover img {
+            filter: brightness(0) invert(1); /* Keeps icon white on hover */
+        }
+    </style>
 </head>
-
 <body>
     <div class="flex w-full h-screen">
         <!-- Sidebar kiri -->
-        <div class="bg-white w-[30%] h-full p-6 flex flex-col">
-            <!-- Logo di pojok kiri atas -->
-            <div class="flex items-start align-middle">
-                <img src="{{ asset('img/finder-logo.png') }}" alt="finder-logo" class="w-24">
-                <h1 class="text-2xl font-semibold text-center h-full align-middle">Hello, admin! :D</h1>
+        <div class="bg-white w-[20%] h-full p-4 flex flex-col border-r border-gray-200">
+            <!-- Logo -->
+            <div class="my-4 flex justify-center">
+                <img src="{{ asset('assets/images/logo-finder.svg') }}" alt="finder-logo" class="w-30">
             </div>
+            <hr class="border-t border-gray-300">
 
-            <!-- Konten tengah -->
-            <div class="flex flex-col items-center">
-                <!-- Tombol navigasi -->
-                <a href="/admin/fishes"
-                    class="bg-blue-500 text-white px-4 py-2 rounded mb-4 hover:bg-blue-600 transition">
+            <!-- Navigasi -->
+            <nav class="flex flex-col space-y-2">
+                <button onclick="setActive(this); window.location.href='/admin/fishes'" class="text-gray-700 px-4 py-3 rounded flex items-center hover:bg-gray-100 transition text-lg">
+                    <img src="{{ asset('assets/images/fish-icon.svg') }}" alt="fish-icon" class="w-6 h-6 mr-3">
                     Kelola Fishes
-                </a>
-                <a href="/admin/foods" class="bg-green-500 text-white px-4 py-2 mb-4 rounded hover:bg-green-600 transition">
-                    Kelola Foods
-                </a>
-                <a href="/admin/user-results" class="bg-green-500 text-white px-4 mb-4 py-2 rounded hover:bg-green-600 transition">
-                    Kelola History
-                </a>
-                <a href="/admin/varieties" class="bg-green-500 text-white px-4 mb-4 py-2 rounded hover:bg-green-600 transition">
-                    Kelola Varietas Ikan
-                </a>
-                <form method="POST" action="{{ route('admin.logout') }}">
-                    @csrf
-                    <button type="submit">Logout</button>
-                </form>
+                </button>
 
-            </div>
+                <button onclick="setActive(this); window.location.href='/admin/foods'" class="text-gray-700 px-4 py-3 rounded flex items-center hover:bg-gray-100 transition text-lg">
+                    <img src="{{ asset('assets/images/fish-food-icon.svg') }}" alt="fish-food-icon" class="w-6 h-6 mr-3">
+                    Kelola Foods
+                </button>
+
+                <button onclick="setActive(this); window.location.href='/admin/user-results'" class="text-gray-700 px-4 py-3 rounded flex items-center hover:bg-gray-100 transition text-lg">
+                    <img src="{{ asset('assets/images/history-icon.svg') }}" alt="history-icon" class="w-6 h-6 mr-3">
+                    Kelola History
+                </button>
+
+                <button onclick="setActive(this); window.location.href='/admin/varieties'" class="text-gray-700 px-4 py-3 rounded flex items-center hover:bg-gray-100 transition text-lg">
+                    <img src="{{ asset('assets/images/fish-icon.svg') }}" alt="fish-icon" class="w-6 h-6 mr-3">
+                    Kelola Varietas Ikan
+                </button>
+
+                <hr class="border-t border-gray-300">
+
+                <form method="POST" action="{{ route('admin.logout') }}" class="w-full">
+                    @csrf
+                    <button type="submit" class="text-gray-700 px-4 py-3 rounded flex items-center hover:bg-gray-100 transition w-full text-lg">
+                        <img src="{{ asset('assets/images/logout-icon.svg') }}" alt="logout-icon" class="w-6 h-6 mr-3">
+                        Logout
+                    </button>
+                </form>
+            </nav>
         </div>
 
-
         <!-- Konten kanan -->
-        <div class="bg-[#0E87CC] w-[70%] h-full overflow-y-auto p-8 text-white">
-
-            {{-- Konten utama halaman --}}
+        <div class="bg-[#0E87CC] w-[80%] h-full overflow-y-auto p-8 text-white">
             <main>
                 @yield('content')
             </main>
-
         </div>
     </div>
 
-</body>
+    <script>
+        function setActive(button) {
+            // Remove active class from all buttons
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // Add active class to the clicked button
+            button.classList.add('active');
+        }
 
+        // Set active button based on current URL
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('nav button').forEach(button => {
+                const href = button.getAttribute('onclick').match(/\/admin\/[^']+/)[0];
+                if (currentPath === href) {
+                    button.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
 </html>
