@@ -14,43 +14,34 @@ class HomeController extends Controller
         if (!Auth::check()) {
             return redirect()->route('login'); // Pastikan route 'login' ada
         }
-      
-      $userId = Auth::id();
+
+        $userId = Auth::id();
         $heroFish = null;
         $isFromSPK = false;
-        $noSPKResultYet = false; 
-
+        $noSPKResultYet = false;
+        $showPasswordAlert = Auth::user()->SET_PASSWORD == 0;
         $latestResult = Results::where('USER_ID', $userId)
-                               ->orderBy('TIME_ADDED', 'desc')
-                               ->first();
+            ->orderBy('TIME_ADDED', 'desc')
+            ->first();
 
         if (!$latestResult) {
             $noSPKResultYet = true;
-             $heroFish = AlternativeFish::query()
+            $heroFish = AlternativeFish::query()
                 ->whereNotNull('IMAGE')
                 ->where('IS_VERIFIED', 1)
                 ->where('IS_DELETED', 0)
                 ->inRandomOrder()
                 ->first();
-            if (!$heroFish) { 
-                 $heroFish = AlternativeFish::inRandomOrder()->first();
+            if (!$heroFish) {
+                $heroFish = AlternativeFish::inRandomOrder()->first();
             }
 
         } else {
             $noSPKResultYet = false;
             $topRankedDetail = ResultDetails::where('RESULT_ID', $latestResult->RESULT_ID)
-                                            ->where('RANKING', 1)
-                                            ->first();
-        $user = Auth::user();
-        $showPasswordAlert = Auth::user()->SET_PASSWORD == 0;
-
-        $randomFish = AlternativeFish::query()
-            ->whereNotNull('IMAGE')
-            ->where('IS_VERIFIED', 1)
-            ->where('IS_DELETED', 0)
-            ->inRandomOrder()
-            ->first();
-
+                ->where('RANKING', 1)
+                ->first();
+            $user = Auth::user();
 
             if ($topRankedDetail) {
                 $fetchedHeroFish = AlternativeFish::find($topRankedDetail->FISH_ID);
@@ -88,8 +79,8 @@ class HomeController extends Controller
         $alternativeFishes = $alternativeFishesQuery->inRandomOrder()
             ->limit(12)
             ->get();
-      
-      return view('user.homepage', compact('heroFish','randomFish', 'alternativeFishes', 'isFromSPK', 'noSPKResultYet','showPasswordAlert'));
+
+        return view('user.homepage', compact('heroFish', 'alternativeFishes', 'isFromSPK', 'noSPKResultYet', 'showPasswordAlert'));
 
     }
 }
