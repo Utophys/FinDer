@@ -38,6 +38,13 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/fish/{id}', [FishController::class, 'show'])->name('user.fish_detail');
 
     Route::post('/send-password-reset-link', [PasswordResetController::class, 'sendCustomResetLink'])->name('user.reset_password_send');
+  
+    Route::get('/dss', function () {
+        // Pastikan file 'kuesioner.blade.php' ada di resources/views/
+        return view('user.dss');
+    })->name('user.dss');
+    Route::post('/dss/store-result', [MooraDemoController::class, 'storeResult'])->name('user.dss.storeResult');
+    Route::get('/dss/results/{result_id}', [MooraDemoController::class, 'show'])->name('user.dss.showResult');
 });
 
 // Public about page
