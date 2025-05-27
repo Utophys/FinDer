@@ -3,9 +3,9 @@
 
 <nav class="bg-white shadow-md py-6 px-8 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
     <!-- Left: FinDer Logo -->
-    <div class="flex items-center">
+    <a href="{{ route('homepage') }}" class="flex items-center">
         <img src="{{ asset('assets/images/FinDer-Logos.svg') }}" alt="FinDer Logo" class="h-12 max-h-full object-contain">
-    </div>
+    </a>
 
     <!-- Right: User Info with Dropdown -->
     <div class="relative" x-data="{ open: false }">
@@ -20,13 +20,12 @@
             <img src="{{ asset('assets/images/icon-user.svg') }}" alt="User Icon" class="h-8 w-8 rounded-full">
         </button>
 
+
         <!-- Dropdown Menu -->
         <div x-show="open" @click.outside="open = false" x-transition
             class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-50">
             @auth
-            <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black no-underline">
-                View Profile
-            </a>
+
             <form method="POST" action="{{ route('user.logout') }}">
                 @csrf
                 <button type="submit">Logout</button>

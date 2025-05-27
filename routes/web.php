@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\MooraDemoController;
+use App\Http\Controllers\MooraController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FishController;
@@ -28,19 +28,17 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/homepage', [HomeController::class, 'index'])->name('homepage');
     Route::post('/logout', [AuthController::class, 'logout'])->name('user.logout');
     Route::get('/fish/{id}', [FishController::class, 'show'])->name('user.fish_detail');
-    Route::get('/dss', function () {
-        // Pastikan file 'kuesioner.blade.php' ada di resources/views/
-        return view('user.dss');
-    })->name('user.dss');
-    Route::post('/dss/store-result', [MooraDemoController::class, 'storeResult'])->name('user.dss.storeResult');
-    Route::get('/dss/results/{result_id}', [MooraDemoController::class, 'show'])->name('user.dss.showResult');
+    Route::get('/dss', function () {return view('user.dss.questions');})->name('user.dss.questions');
+    Route::post('/dss/store-result', [MooraController::class, 'storeResult'])->name('user.dss.storeResult');
+    Route::get('/dss/results/{result_id}', [MooraController::class, 'show'])->name('user.dss.results');
+    Route::get('/dss/calculation/{result_id}', [MooraController::class, 'showCalculation'])->name('user.dss.calculation');
 });
 
 // Public about page
 Route::get('/about-us', fn() => view('about-us'))->name('about-us');
 
-Route::get('/moorademo', [MooraDemoController::class, 'index'])->name('moorademo');
-Route::post('/moorademo/store', [MooraDemoController::class, 'storeResult'])->name('moorademo.store');
+Route::get('/moorademo', [MooraController::class, 'index'])->name('moorademo');
+Route::post('/moorademo/store', [MooraController::class, 'storeResult'])->name('moorademo.store');
 
 // Admin routes protected by auth + admin middleware
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
