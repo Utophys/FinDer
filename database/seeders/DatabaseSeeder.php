@@ -15,10 +15,11 @@ class DatabaseSeeder extends Seeder
     {
         // Daftarkan semua seeder di sini
         $this->call([
+            UserAccountSeeder::class,
             CriteriaSeeder::class,
+            FoodSeeder::class,
             AlternativeFishSeeder::class,
             MasterAlternativesSeeder::class,
-            FoodSeeder::class
         ]);
     }
 }
