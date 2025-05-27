@@ -6,6 +6,14 @@ use App\Http\Controllers\MooraController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FishController;
+use App\Http\Controllers\PasswordResetController;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendEmail;
+
+
 
 // Redirect root to auth page
 Route::get('/', fn() => redirect('/auth'));
@@ -32,7 +40,8 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::post('/dss/store-result', [MooraController::class, 'storeResult'])->name('user.dss.storeResult');
     Route::get('/dss/results/{result_id}', [MooraController::class, 'show'])->name('user.dss.results');
     Route::get('/dss/calculation/{result_id}', [MooraController::class, 'showCalculation'])->name('user.dss.calculation');
-});
+    Route::post('/send-password-reset-link', [PasswordResetController::class, 'sendCustomResetLink'])->name('user.reset_password_send');
+  });
 
 // Public about page
 Route::get('/about-us', fn() => view('about-us'))->name('about-us');
@@ -64,6 +73,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::put('/varieties/{id}/recover', [AdminController::class, 'recoverVariety'])->name('admin.varieties.recover');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
-
 });
 
+Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');

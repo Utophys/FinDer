@@ -1,7 +1,32 @@
 @extends('layouts.app')
 
 @section('content')
-    <div id="page-wrapper" class="pt-24 transition-colors duration-500" style="background: transparent;">
+@if($showPasswordAlert)
+<div class="fixed top-24 left-0 right-0 z-50 bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 shadow-md flex items-center justify-between" role="alert">
+    <div class="flex items-center space-x-2">
+        <svg class="w-5 h-5 text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.72-1.36 3.485 0l6.518 11.597c.75 1.336-.213 3.004-1.742 3.004H3.48c-1.53 0-2.493-1.668-1.743-3.004L8.257 3.1zm1.743 9.401a1 1 0 10-2 0 1 1 0 002 0zm-.25-6.75a.75.75 0 00-1.5 0v4a.75.75 0 001.5 0v-4z" clip-rule="evenodd" />
+        </svg>
+
+        <form method="POST" action="{{ route('user.reset_password_send') }}">
+            @csrf
+            <button type="submit" class="text-sm font-medium text-yellow-800 hover:underline bg-transparent border-none p-0">
+                Masukkan Password Baru Anda Agar Lebih Aman! Klik Disini Untuk Menerima Email Pembaruan Password.
+            </button>
+        </form>
+
+    </div>
+    <button onclick="this.parentElement.remove()" class="text-sm font-medium text-yellow-800 hover:text-yellow-600">
+        ×
+    </button>
+</div>
+@endif
+
+
+
+
+
+<div id="page-wrapper" class="pt-24 transition-colors duration-500" style="background: transparent;">
 
         <section class="relative bg-white overflow-hidden h-[550px] md:h-[650px] group">
 

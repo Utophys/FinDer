@@ -14,41 +14,43 @@ class HomeController extends Controller
         if (!Auth::check()) {
             return redirect()->route('login'); // Pastikan route 'login' ada
         }
-
-        $userId = Auth::id();
+      
+      $userId = Auth::id();
         $heroFish = null;
         $isFromSPK = false;
-        $noSPKResultYet = false; // Flag baru: true jika user belum pernah SPK
+        $noSPKResultYet = false; 
 
-        // 1. Cari RESULT_ID terbaru untuk pengguna yang login
         $latestResult = Results::where('USER_ID', $userId)
                                ->orderBy('TIME_ADDED', 'desc')
                                ->first();
 
         if (!$latestResult) {
-            // Pengguna belum pernah melakukan SPK
             $noSPKResultYet = true;
-            // Kita tetap bisa memuat ikan random untuk bagian $alternativeFishes
-            // atau jika Anda ingin hero section tetap ada background ikan random saat pesan selamat datang.
-            // Jika tidak, $heroFish bisa tetap null dan Blade akan menampilkan pesan selamat datang saja.
-            // Untuk contoh ini, kita tetap load $heroFish random agar $alternativeFishes bisa di-filter
-            // dan untuk kasus jika Anda mau ada gambar background di pesan selamat datang.
              $heroFish = AlternativeFish::query()
                 ->whereNotNull('IMAGE')
                 ->where('IS_VERIFIED', 1)
                 ->where('IS_DELETED', 0)
                 ->inRandomOrder()
                 ->first();
-            if (!$heroFish) { // Fallback jika query diatas kosong
+            if (!$heroFish) { 
                  $heroFish = AlternativeFish::inRandomOrder()->first();
             }
 
         } else {
-            // Pengguna sudah pernah SPK, coba tampilkan hasil ranking 1
             $noSPKResultYet = false;
             $topRankedDetail = ResultDetails::where('RESULT_ID', $latestResult->RESULT_ID)
                                             ->where('RANKING', 1)
                                             ->first();
+        $user = Auth::user();
+        $showPasswordAlert = Auth::user()->SET_PASSWORD == 0;
+
+        $randomFish = AlternativeFish::query()
+            ->whereNotNull('IMAGE')
+            ->where('IS_VERIFIED', 1)
+            ->where('IS_DELETED', 0)
+            ->inRandomOrder()
+            ->first();
+
 
             if ($topRankedDetail) {
                 $fetchedHeroFish = AlternativeFish::find($topRankedDetail->FISH_ID);
@@ -86,7 +88,8 @@ class HomeController extends Controller
         $alternativeFishes = $alternativeFishesQuery->inRandomOrder()
             ->limit(12)
             ->get();
+      
+      return view('user.homepage', compact('heroFish','randomFish', 'alternativeFishes', 'isFromSPK', 'noSPKResultYet','showPasswordAlert'));
 
-        return view('user.homepage', compact('heroFish', 'alternativeFishes', 'isFromSPK', 'noSPKResultYet'));
     }
 }

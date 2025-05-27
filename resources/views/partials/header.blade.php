@@ -25,7 +25,6 @@
         <div x-show="open" @click.outside="open = false" x-transition
             class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-50">
             @auth
-
             <form method="POST" action="{{ route('user.logout') }}">
                 @csrf
                 <button type="submit">Logout</button>
