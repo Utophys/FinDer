@@ -132,7 +132,7 @@
                 </form>
             </div>
 
-            <div class="w-[40%] bg-[#0E87CC] text-white flex flex-col justify-center items-center text-center p-8">
+            <div class="w-[40%] bg-gradient-to-r from-blue-600 to-[#0E87CC] text-white flex flex-col justify-center items-center text-center p-8">
                 <h2 class="text-3xl font-bold mb-4">Belum Punya Akun?</h2>
                 <p class="mb-6 text-lg">Sign Up Sekarang, Dunia Ikan Menunggumu!</p>
                 <button onclick="switchToRegister()" class="bg-white text-[#0E87CC] px-6 py-3 rounded-full text-lg font-semibold">
@@ -143,7 +143,7 @@
 
         <!-- Register Panel -->
         <div id="register-panel" class="flex h-full w-full transition-transform duration-500 {{ $activePanel === 'register' ? '' : 'hidden' }}">
-            <div class="w-[40%] bg-[#0E87CC] text-white flex flex-col justify-center items-center text-center p-8">
+            <div class="w-[40%] bg-gradient-to-r from-blue-600 to-[#0E87CC] text-white flex flex-col justify-center items-center text-center p-8">
                 <h2 class="text-3xl font-bold mb-4">Sudah Punya Akun?</h2>
                 <p class="mb-6 text-lg">Cepat Login, Ikan-Ikan sudah Siap Untuk Dipelihara</p>
                 <button onclick="switchToLogin()" class="bg-white text-[#0E87CC] px-6 py-3 rounded-full text-lg font-semibold">

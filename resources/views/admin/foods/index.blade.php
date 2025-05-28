@@ -1,9 +1,9 @@
 @extends('layouts.admin.app')
 
 @section('content')
-<div class="mt-10 px-4"> {{-- Added px-4 like fishes page --}}
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold">Data Makanan</h2>
+<div class="mt-10 px-4">
+    <div class="flex justify-between items-center mb-6 px-18">
+        <h1 class="font-bold">Data Makanan</h1>
         <button class="bg-white text-[#0E87CC] px-4 py-2 rounded hover:bg-gray-200 transition" data-bs-toggle="modal" data-bs-target="#createFoodModal">+ Tambah Makanan</button>
     </div>
 
