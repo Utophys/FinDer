@@ -23,12 +23,12 @@
         }
     </style>
 </head>
-<body class="bg-gray-100 font-sans w-full max-w-full overflow-x-hidden box-border">
+<body class="bg-gray-100 font-sans">
     <!-- Include Header -->
     @include('partials.header')
 
     <!-- Hero Section -->
-    <section id="hero" class="relative bg-cover bg-no-repeat bg-center h-screen w-full pt-16 box-border" style="background-image: url('{{ asset('assets/images/ikan-hias.svg') }}')">
+    <section id="hero" class="relative bg-cover bg-no-repeat bg-center h-screen w-full pt-16" style="background-image: url('{{ asset('assets/images/ikan-hias.svg') }}')">
         <div class="absolute inset-0 bg-black opacity-30"></div>
         <div class="container mx-auto px-6 h-full flex flex-col justify-center items-center text-center text-white relative z-10 max-w-full">
             <h1 class="text-5xl font-bold mb-4">About Us</h1>
@@ -42,7 +42,7 @@
     </section>
 
     <!-- More Info Section -->
-    <section id="more-info" class="bg-gray-100 w-full overflow-x-hidden overflow-y-auto box-border relative" style="height: calc(100vh - 96px);">
+    <section id="more-info" class="bg-gray-100  relative" style="height: calc(100vh - 96px);">
         <div class="container mx-auto h-full flex flex-col justify-center max-w-full">
             <!-- Top: FinDer Info -->
             <div class="flex flex-col md:flex-row items-center mb-24">
@@ -84,7 +84,7 @@
     </section>
 
     <!-- About Developer Section -->
-    <section id="about-developer" class="bg-blue-800 w-full overflow-x-hidden overflow-y-auto box-border relative" style="height: calc(100vh - 96px);">
+    <section id="about-developer" class="bg-blue-800 relative" style="height: calc(100vh - 96px);">
         <div class="container mx-auto px-8 h-full flex flex-col max-w-full">
             <h2 class="text-4xl font-bold text-center text-white pt-8 mb-6">About Developer</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
@@ -124,105 +124,103 @@
         </div>
     </section>
 
-    <!-- Smooth Scroll and Button Visibility Script -->
     <script>
-        function smoothScrollWithOffset(targetId, offset = 96) {
-            const target = document.querySelector(targetId);
-            if (!target) return;
+    function smoothScrollWithOffset(targetId, offset = 96) {
+        const target = document.querySelector(targetId);
+        if (!target) return;
 
-            const targetPosition = target.offsetTop - offset;
-            window.scrollTo({
-                top: targetPosition,
-                behavior: 'smooth'
-            });
-        }
+        const targetPosition = target.offsetTop - offset;
+        window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+        });
+    }
 
-        // Function to update button visibility, navigation, and animation
-        function updateButtons() {
-            const moreInfoSection = document.querySelector('#more-info');
-            const aboutDevSection = document.querySelector('#about-developer');
-            const moreInfoButton = document.querySelector('.more-info-button');
-            const aboutDevButton = document.querySelector('.about-dev-button');
-            const moreInfoSvg = document.querySelector('.more-info-svg');
+    function updateButtons() {
+        const moreInfoSection = document.querySelector('#more-info');
+        const aboutDevSection = document.querySelector('#about-developer');
+        const moreInfoButton = document.querySelector('.more-info-button');
+        const aboutDevButton = document.querySelector('.about-dev-button');
+        const moreInfoSvg = document.querySelector('.more-info-svg');
 
-            // Get section positions
-            const moreInfoTop = moreInfoSection.offsetTop;
-            const moreInfoBottom = moreInfoTop + moreInfoSection.offsetHeight;
-            const aboutDevTop = aboutDevSection.offsetTop;
-            const aboutDevBottom = aboutDevTop + aboutDevSection.offsetHeight;
-            const scrollPosition = window.scrollY;
-            const windowHeight = window.innerHeight;
-            const scrollCenter = scrollPosition + windowHeight / 2;
+        // Get section positions
+        const moreInfoTop = moreInfoSection.offsetTop;
+        const moreInfoBottom = moreInfoTop + moreInfoSection.offsetHeight;
+        const aboutDevTop = aboutDevSection.offsetTop;
+        const aboutDevBottom = aboutDevTop + aboutDevSection.offsetHeight;
+        const scrollPosition = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const scrollCenter = scrollPosition + windowHeight / 2;
 
-            // Track last scroll position to determine direction
-            const lastScrollPosition = window.lastScrollPosition || 0;
-            const scrollingUp = scrollPosition < lastScrollPosition;
-            window.lastScrollPosition = scrollPosition;
+        // Track last scroll position to determine direction
+        const lastScrollPosition = window.lastScrollPosition || 0;
+        const scrollingUp = scrollPosition < lastScrollPosition;
+        window.lastScrollPosition = scrollPosition;
 
-            // More Info Button Visibility and Navigation
-            if (scrollCenter >= moreInfoTop && scrollCenter <= moreInfoBottom) {
-                // Show button with animation
-                if (moreInfoButton.style.display !== 'flex') {
-                    moreInfoButton.style.display = 'flex';
-                    moreInfoButton.classList.remove('fade-in');
-                    void moreInfoButton.offsetWidth; // Trigger reflow to restart animation
-                    moreInfoButton.classList.add('fade-in');
-                }
-
-                // Update SVG and navigation based on scroll direction
-                if (scrollingUp) {
-                    moreInfoSvg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />';
-                    moreInfoButton.setAttribute('href', '#hero');
-                    moreInfoButton.setAttribute('title', 'Kembali ke Hero');
-                    moreInfoButton.onclick = () => smoothScrollWithOffset('#hero', 96);
-                } else {
-                    moreInfoSvg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>';
-                    moreInfoButton.setAttribute('href', '#about-developer');
-                    moreInfoButton.setAttribute('title', 'Lihat Developer');
-                    moreInfoButton.onclick = () => smoothScrollWithOffset('#about-developer', 96);
-                }
-            } else {
-                moreInfoButton.style.display = 'none';
+        // More Info Button Visibility and Navigation
+        if (scrollCenter >= moreInfoTop && scrollCenter <= moreInfoBottom) {
+            // Show button with animation
+            if (moreInfoButton.style.display !== 'flex') {
+                moreInfoButton.style.display = 'flex';
+                moreInfoButton.classList.remove('fade-in');
+                void moreInfoButton.offsetWidth; // Trigger reflow
+                moreInfoButton.classList.add('fade-in');
             }
 
-            // About Developer Button Visibility (only when fully visible)
-            if (aboutDevTop >= scrollPosition && aboutDevBottom <= scrollPosition + windowHeight) {
-                // Show button with animation
-                if (aboutDevButton.style.display !== 'flex') {
-                    aboutDevButton.style.display = 'flex';
-                    aboutDevButton.classList.remove('fade-in');
-                    void aboutDevButton.offsetWidth; // Trigger reflow to restart animation
-                    aboutDevButton.classList.add('fade-in');
-                }
+            // Update SVG and href based on scroll direction
+            if (scrollingUp) {
+                moreInfoSvg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />';
+                moreInfoButton.setAttribute('href', '#hero');
+                moreInfoButton.setAttribute('title', 'Kembali ke Hero');
             } else {
-                aboutDevButton.style.display = 'none';
+                moreInfoSvg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>';
+                moreInfoButton.setAttribute('href', '#about-developer');
+                moreInfoButton.setAttribute('title', 'Lihat Developer');
             }
-
-            // Debug log to confirm visibility logic
-            console.log('Scroll Position:', scrollPosition, 'More Info Visible:', scrollCenter >= moreInfoTop && scrollCenter <= moreInfoBottom, 'About Dev Fully Visible:', aboutDevTop >= scrollPosition && aboutDevBottom <= scrollPosition + windowHeight);
+        } else {
+            moreInfoButton.style.display = 'none';
         }
 
-        // Add event listener for scroll
-        window.addEventListener('scroll', updateButtons);
+        // About Developer Button Visibility
+        if (aboutDevTop >= scrollPosition && aboutDevBottom <= scrollPosition + windowHeight) {
+            if (aboutDevButton.style.display !== 'flex') {
+                aboutDevButton.style.display = 'flex';
+                aboutDevButton.classList.remove('fade-in');
+                void aboutDevButton.offsetWidth; // Trigger reflow
+                aboutDevButton.classList.add('fade-in');
+            }
+        } else {
+            aboutDevButton.style.display = 'none';
+        }
 
-        // Initial call to set button states on page load
-        updateButtons();
+        // Debug log to confirm visibility logic
+        console.log('Scroll Position:', scrollPosition, 'More Info Visible:', scrollCenter >= moreInfoTop && scrollCenter <= moreInfoBottom, 'About Dev Fully Visible:', aboutDevTop >= scrollPosition && aboutDevBottom <= scrollPosition + windowHeight);
+    }
 
-        // Event listeners for manual clicks
-        document.querySelector('a[href="#more-info"]').addEventListener('click', function(e) {
-            e.preventDefault();
-            smoothScrollWithOffset('#more-info', 96);
-        });
+    // Add scroll event listener
+    window.addEventListener('scroll', updateButtons);
 
-        document.querySelector('a[href="#about-developer"]').addEventListener('click', function(e) {
-            e.preventDefault();
-            smoothScrollWithOffset('#about-developer', 96);
-        });
+    // Initial call to set button states on page load
+    updateButtons();
 
-        document.querySelector('a[href="#hero"]').addEventListener('click', function(e) {
-            e.preventDefault();
-            smoothScrollWithOffset('#hero', 96);
-        });
-    </script>
+    // Event listener for Selengkapnya button in Hero section
+    document.querySelector('a[href="#more-info"]').addEventListener('click', function(e) {
+        e.preventDefault();
+        smoothScrollWithOffset('#more-info', 96);
+    });
+
+    // Event listener for More Info button
+    document.querySelector('.more-info-button').addEventListener('click', function(e) {
+        e.preventDefault();
+        const href = this.getAttribute('href');
+        smoothScrollWithOffset(href, 96);
+    });
+
+    // Event listener for About Developer button
+    document.querySelector('.about-dev-button').addEventListener('click', function(e) {
+        e.preventDefault();
+        smoothScrollWithOffset('#hero', 96);
+    });
+</script>
 </body>
 </html>

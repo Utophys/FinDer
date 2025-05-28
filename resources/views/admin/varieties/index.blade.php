@@ -17,7 +17,7 @@
                     <div class="flex flex-wrap gap-4">
                         @foreach($varietyGroup as $variety)
                                 <div
-                                    class="w-64 rounded-lg shadow p-4 
+                                    class="w-64 rounded-lg shadow p-4
                                                                                         {{ $variety['IS_DELETED'] == 1 ? 'bg-red-500 text-white' : 'bg-gray-50' }}">
 
                                     <h4 class="text-lg font-semibold text-black">{{ $variety['VARIETY_NAME'] }}</h4>
@@ -138,6 +138,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Tambah Variasi Ikan Baru</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-black">
                         <div class="mb-3">
@@ -174,6 +175,5 @@
             </form>
         </div>
     </div>
-
 
 @endsection
