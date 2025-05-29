@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FishController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\HistoryController;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -35,15 +36,22 @@ Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallbac
 Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/homepage', [HomeController::class, 'index'])->name('homepage');
     Route::post('/logout', [AuthController::class, 'logout'])->name('user.logout');
+    Route::get('/about-us', fn() => view('about-us'))->name('user.about-us');
+    Route::get('/profile', fn() => view('user.profile'))->name('user.profile');
     Route::get('/fish/{id}', [FishController::class, 'show'])->name('user.fish_detail');
-    Route::get('/dss', function () {return view('user.dss.questions');})->name('user.dss.questions');
+    Route::get('/dss', function () {
+        return view('user.dss.questions');
+    })->name('user.dss.questions');
     Route::post('/dss/store-result', [MooraController::class, 'storeResult'])->name('user.dss.storeResult');
     Route::get('/dss/results/{result_id}', [MooraController::class, 'show'])->name('user.dss.results');
     Route::get('/dss/calculation/{result_id}', [MooraController::class, 'showCalculation'])->name('user.dss.calculation');
     Route::post('/send-password-reset-link', [PasswordResetController::class, 'sendCustomResetLink'])->name('user.reset_password_send');
     Route::get('/about-us', fn() => view('about-us'))->name('user.about-us');
-    Route::get('/profile', fn() => view('user.profile'))->name('user.profile');
-  });
+    Route::get('/profile', [HistoryController::class, 'showUserDSSHistory'])->name('user.profile');
+    Route::post('/profile/update', [HistoryController::class, 'updateProfile'])->name('profile.update');
+    Route::post('/profile/delete', [HistoryController::class, 'deleteProfile'])->name('profile.delete');
+
+});
 
 Route::get('/moorademo', [MooraController::class, 'index'])->name('moorademo');
 Route::post('/moorademo/store', [MooraController::class, 'storeResult'])->name('moorademo.store');

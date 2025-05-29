@@ -11,9 +11,17 @@ class HomeController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
+
         if (!Auth::check()) {
-            return redirect()->route('login'); // Pastikan route 'login' ada
+            return redirect()->route('/');
         }
+
+        if ($user->IS_DELETED == 1) {
+            Auth::logout();
+            return redirect('/');
+        }
+
 
         $userId = Auth::id();
         $heroFish = null;
@@ -35,7 +43,6 @@ class HomeController extends Controller
             if (!$heroFish) {
                 $heroFish = AlternativeFish::inRandomOrder()->first();
             }
-
         } else {
             $noSPKResultYet = false;
             $topRankedDetail = ResultDetails::where('RESULT_ID', $latestResult->RESULT_ID)
@@ -81,6 +88,5 @@ class HomeController extends Controller
             ->get();
 
         return view('user.homepage', compact('heroFish', 'alternativeFishes', 'isFromSPK', 'noSPKResultYet', 'showPasswordAlert'));
-
     }
 }

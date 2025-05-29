@@ -31,7 +31,7 @@ class AuthController extends Controller
 
     // fungsi login
     public function login(Request $request)
-    {   
+    {
         // inisialisasi validator
         $credentials = $request->only('email', 'password');
         $remember = $request->has('remember');
@@ -58,13 +58,21 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             $user = Auth::user();
 
-            // kalo admin
+            if ($user->IS_DELETED == 1) {
+                Auth::logout();
+                return redirect()->route('auth.show')
+                    ->withErrors(['email' => 'Akun sudah tidak ada coba hubungi Admin'], 'login')
+                    ->withInput()
+                    ->with('active_panel', 'login');
+            }
+
             if ($user->ROLE === 'admin') {
                 return redirect()->route('admin.fishes.index');
             }
 
             return redirect()->route('homepage');
         }
+
 
         // kalo gagal login
         return redirect()->route('auth.show')
@@ -76,9 +84,16 @@ class AuthController extends Controller
     // fungsi register
     public function register(Request $request)
     {
+        $existingUser = User::where('EMAIL', $request->email)->first();
+        if ($existingUser && $existingUser->IS_DELETED == 1) {
+            return redirect()->route('auth.show')
+                ->withErrors(['email' => 'Akun sudah tidak ada coba hubungi Admin'], 'register')
+                ->withInput()
+                ->with('active_panel', 'register');
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:100', 'regex:/^[a-zA-Z0-9 ]+$/'],
-            'email' => 'required|string|email|max:40|unique:user_account,EMAIL',
             'password' => [
                 'required',
                 'string',
@@ -139,7 +154,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/'); 
+        return redirect('/');
     }
 
     public function redirectToGoogle()
@@ -154,7 +169,13 @@ class AuthController extends Controller
 
             $user = User::where('EMAIL', $googleUser->getEmail())->first();
 
-            if (!$user) {
+            if ($user) {
+                if ($user->IS_DELETED == 1) {
+                    return redirect()->route('auth.show')
+                        ->withErrors(['email' => 'Akun sudah tidak ada coba hubungi Admin'], 'login')
+                        ->with('active_panel', 'login');
+                }
+            } else {
                 $user = User::create([
                     'USER_ID' => (string) Str::uuid(),
                     'USERNAME' => $googleUser->getName(),
@@ -165,7 +186,6 @@ class AuthController extends Controller
                     'ROLE' => 'user',
                     'IMAGE' => $googleUser->getAvatar(),
                     'IS_DELETED' => 0,
-
                 ]);
             }
 
@@ -176,5 +196,4 @@ class AuthController extends Controller
             return redirect()->route('login')->withErrors(['email' => 'Google login failed.']);
         }
     }
-
 }
