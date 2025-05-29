@@ -4,8 +4,8 @@
 
 @section('content')
 <div class="mt-10 px-4">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold">Data Ikan Alternatif</h2>
+    <div class="flex justify-between items-center mb-6 px-18">
+        <h1 class="font-bold">Data Alternatif Ikan</h1>
         <button class="bg-white text-[#0E87CC] px-4 py-2 rounded hover:bg-gray-200 transition" data-bs-toggle="modal" data-bs-target="#createIkanModal">+ Tambah Ikan</button>
     </div>
 
@@ -32,7 +32,7 @@
 
             <div class="space-y-2 mb-4 flex-grow">
                 <p class="text-sm"><strong>ID:</strong> {{ $fish['FISH_ID'] }}</p>
-                <p class="text-sm"><strong>Deskripsi:</strong> {{ Str::limit($fish['DESCRIPTION'], 70) }}</p> {{-- Added Str::limit for consistency --}}
+                <p class="text-sm"><strong>Deskripsi:</strong> {{ Str::limit($fish['DESCRIPTION'], 70) }}</p>
                 <p class="text-sm"><strong>Makanan Terkait:</strong> {{ $fish['FOOD_ID'] }}</p>
             </div>
 
@@ -42,7 +42,7 @@
                     Edit
                 </button>
                 @if($fish['IS_VERIFIED'] == 0)
-                <button class="bg-blue-600 hover:bg-blue-700 text-white py-1 rounded text-sm flex-1 text-center"
+                <button class="bg-[#0E87CC] hover:bg-gradient-to-r hover:from-[#1e40af] hover:to-[#0A6CA3] text-white py-1 rounded text-sm flex-1 text-center"
                     data-bs-toggle="modal" data-bs-target="#verifyIkanModal{{ $fish['FISH_ID'] }}">
                     Verify
                 </button>

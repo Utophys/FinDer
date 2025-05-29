@@ -27,7 +27,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('register');
 });
 
-// Google OAuth routes 
+// Google OAuth routes
 Route::get('/auth/google/redirect', [AuthController::class, 'redirectToGoogle'])->name('google.redirect');
 Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->name('google.callback');
 
@@ -41,10 +41,9 @@ Route::middleware(['auth', 'user'])->prefix('user')->group(function () {
     Route::get('/dss/results/{result_id}', [MooraController::class, 'show'])->name('user.dss.results');
     Route::get('/dss/calculation/{result_id}', [MooraController::class, 'showCalculation'])->name('user.dss.calculation');
     Route::post('/send-password-reset-link', [PasswordResetController::class, 'sendCustomResetLink'])->name('user.reset_password_send');
+    Route::get('/about-us', fn() => view('about-us'))->name('user.about-us');
+    Route::get('/profile', fn() => view('user.profile'))->name('user.profile');
   });
-
-// Public about page
-Route::get('/about-us', fn() => view('about-us'))->name('about-us');
 
 Route::get('/moorademo', [MooraController::class, 'index'])->name('moorademo');
 Route::post('/moorademo/store', [MooraController::class, 'storeResult'])->name('moorademo.store');
