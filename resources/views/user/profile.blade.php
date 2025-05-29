@@ -146,31 +146,34 @@
                     ],
                     ];
 
-                    $questionMap = [];
-                    foreach ($questions as $q) {
-                    $questionMap[$q['dbCriteriaId']] = $q;
+                    $criteriaMap = [];
+                    foreach ($entry['criteria'] as $crit) {
+                    $criteriaMap[$crit->CRITERIA_ID] = $crit;
                     }
                     @endphp
 
                     <div class="mt-4">
                         <h3 class="font-semibold mb-2">Pertanyaan & Jawaban</h3>
                         <div class="space-y-4">
-                            @foreach ($entry['criteria'] as $crit)
+                            @foreach ($questions as $q)
                             @php
-                            $q = $questionMap[$crit->CRITERIA_ID] ?? null;
+                            $answer = $criteriaMap[$q['dbCriteriaId']] ?? null;
                             @endphp
-                            @if($q)
                             <div class="bg-gray-100 p-3 rounded shadow-sm">
                                 <p class="text-sm font-medium text-gray-800">{{ $q['meta'] }}</p>
                                 <p class="text-sm text-gray-700">{{ $q['text'] }}</p>
+                                @if ($answer)
                                 <p class="mt-1 font-semibold text-blue-700">
-                                    Jawaban: {{ $crit->WEIGHT_TXT }} (Nilai: {{ $crit->WEIGHT_INT }})
+                                    Jawaban: {{ $answer->WEIGHT_TXT }} (Nilai: {{ $answer->WEIGHT_INT }})
                                 </p>
+                                @else
+                                <p class="mt-1 italic text-gray-500">Belum ada jawaban.</p>
+                                @endif
                             </div>
-                            @endif
                             @endforeach
                         </div>
                     </div>
+
 
             </div>
 
@@ -235,7 +238,7 @@
                             d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
                 </button>
-    </div>
+            </div>
 
             <div>
                 <label for="password_confirmation" class="block mb-2 font-medium text-gray-700">Konfirmasi Password</label>
