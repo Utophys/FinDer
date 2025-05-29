@@ -1,3 +1,6 @@
+@extends('layouts.app')
+
+@section('content')
 
 <div class="max-w-md mx-auto pt-32 px-6">
     <h2 class="text-3xl font-semibold mb-6 text-center text-gray-800">Reset Password</h2>
@@ -52,3 +55,4 @@
         </button>
     </form>
 </div>
+@endsection
