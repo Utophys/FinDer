@@ -389,8 +389,9 @@ class MooraController extends Controller
         return view('user.dss.calculation', [
             'top1FishDetail' => $top1FishDetail,
             'otherConsiderations' => $otherConsiderations,
-            'calculationData' => $calculationData, // Data kalkulasi akan dikirim
-            'resultId' => $result_id
+            'calculationData' => $calculationData,
+            'resultId' => $result_id,
+            'result' => $result // ← add this line
         ]);
     }
 }

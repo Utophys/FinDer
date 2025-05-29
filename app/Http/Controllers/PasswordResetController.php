@@ -29,7 +29,8 @@ class PasswordResetController extends Controller
             'body' => 'Klik tautan berikut untuk mengatur ulang kata sandi Anda: ' . $resetLink,
         ]));
 
-        return back()->with('status', 'Reset password email sent!');
+        return back()->with('status', 'Periksa Email Anda!');
+        
     }
 
     public function showResetForm(Request $request, $token)
