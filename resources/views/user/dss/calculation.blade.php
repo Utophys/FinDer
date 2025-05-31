@@ -41,6 +41,19 @@
                 </div>
             </div>
         </nav>
+
+
+        <div class="p-6">
+    <button onclick="history.back()"
+        class="mb-6 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 
+               text-white font-semibold rounded-lg shadow-lg 
+               hover:from-indigo-600 hover:to-blue-500 
+               transform hover:-translate-y-1 hover:scale-105 
+               transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        ← Kembali
+    </button>
+</div>
+
 @if(isset($calculationData))
                 @php
                     $userWeights = $calculationData['userWeights'];
