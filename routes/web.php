@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FishController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\AdminHistoryController;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -79,8 +80,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::put('/varieties/{id}/soft-delete', [AdminController::class, 'softDeleteVariety'])->name('admin.varieties.softDelete');
     Route::put('/varieties/{id}/recover', [AdminController::class, 'recoverVariety'])->name('admin.varieties.recover');
 
+    Route::get('/user-results', [AdminHistoryController::class, 'showAllUserDSSHistory'])->name('admin.user-results.index');
+    Route::get('/user-results/{result_id}', [AdminHistoryController::class, 'showCalculationForAdmin'])->name('admin.user-results.admincalculation');
+    
+
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
 });
+
+
 
 Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
