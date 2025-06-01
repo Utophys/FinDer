@@ -15,19 +15,6 @@ use Illuminate\Http\Request;
 
 class MooraController extends Controller
 {
-    public function index()
-    {
-        $results = Results::all();
-        $resultDetails = ResultDetails::all();
-        $criterias = Criteria::all();
-        $masterAlternatives = MasterAlternative::all();
-        $masterCriteria = MasterCriteria::all();
-
-        return view('moorademo.index', compact('results', 'resultDetails', 'criterias', 'masterAlternatives', 'masterCriteria'));
-    }
-
-
-
     public function storeResult(Request $request)
     {
         $request->validate([
@@ -68,7 +55,13 @@ class MooraController extends Controller
             }
 
             // 4. Ambil semua data master_alternatives
-            $alternatives = MasterAlternative::all();
+            $alternatives = MasterAlternative::with([
+                'alternativeFish' => function ($query) {
+                    $query->where('IS_DELETED', 0);
+                }
+            ])->whereHas('alternativeFish', function ($query) {
+                $query->where('IS_DELETED', 0);
+            })->get();
 
             // 5. Normalisasi dan hitung skor MOORA
             $matrix = [];
@@ -153,8 +146,14 @@ class MooraController extends Controller
         }
 
         $allCriteria = Criteria::orderBy('CRITERIA_ID')->get(); // Urutkan agar konsisten
-        $allAlternatives = AlternativeFish::orderBy('FISH_ID')->get(); // Urutkan agar konsisten, pastikan model ini ada
-        $masterAlternativesData = MasterAlternative::all();
+        $allAlternatives = AlternativeFish::where('IS_DELETED', 0)->orderBy('FISH_ID')->get(); // Urutkan agar konsisten, pastikan model ini ada
+        $masterAlternativesData = MasterAlternative::with([
+            'alternativeFish' => function ($query) {
+                $query->where('IS_DELETED', 0);
+            }
+        ])->whereHas('alternativeFish', function ($query) {
+            $query->where('IS_DELETED', 0);
+        })->get();
 
         // --------- 2. Bangun Matriks Keputusan Awal (Xij) ---------
         // Format: $initialMatrix[FISH_ID][CRITERIA_ID] = VALUE
@@ -292,8 +291,20 @@ class MooraController extends Controller
         }
 
         $allCriteria = Criteria::orderBy('CRITERIA_ID')->get();
-        $allAlternatives = AlternativeFish::orderBy('FISH_ID')->get();
-        $masterAlternativesData = MasterAlternative::all();
+        // Ambil FISH_ID yang relevan dari result_detail
+        $fishesInResult = ResultDetails::where('RESULT_ID', $result_id)
+            ->pluck('FISH_ID')
+            ->unique()
+            ->values();
+
+        // Ambil alternatif ikan berdasarkan FISH_ID yang ada di result_detail
+        $allAlternatives = AlternativeFish::whereIn('FISH_ID', $fishesInResult)
+            ->orderBy('FISH_ID')
+            ->get();
+
+        // Ambil data master_alternative berdasarkan FISH_ID yang ada di result_detail
+        $masterAlternativesData = MasterAlternative::whereIn('FISH_ID', $fishesInResult)->get();
+
 
         // --------- 2. Bangun Matriks Keputusan Awal (Xij) ---------
         $initialMatrix = [];

@@ -10,6 +10,7 @@ use App\Models\AlternativeFish;
 use App\Models\Criteria;
 use App\Models\Results;
 use App\Models\MasterAlternative;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,7 @@ class AdminController extends Controller
 {
     public function fishIndex()
     {
-        $fishes = AlternativeFish::all();
+        $fishes = AlternativeFish::where('IS_DELETED', 0)->get();
         $criterias = Criteria::all();
         $foods = Food::all();
 
@@ -26,7 +27,7 @@ class AdminController extends Controller
 
     public function foodIndex()
     {
-        $foods = Food::all();
+        $foods = Food::where('IS_DELETED', 0)->get();
 
         return view('admin.foods.index', compact('foods'));
     }
@@ -40,10 +41,30 @@ class AdminController extends Controller
 
     public function varietyIndex()
     {
-        $varieties = Variety::all()->groupBy('FISH_ID');
-        $fishes = AlternativeFish::all();
+        $varieties = Variety::where('IS_DELETED', 0)->get()->groupBy('FISH_ID');
+        $fishes = AlternativeFish::where('IS_DELETED', 0)->get();
 
         return view('admin.varieties.index', compact('varieties', 'fishes'));
+    }
+
+    public function usersIndex()
+    {
+        $users = User::all();
+        return view('admin.users.index', compact('users'));
+    }
+
+    public function trashIndex()
+    {
+        $deletedAlternativeFish = AlternativeFish::where('IS_DELETED', 1)->get();
+        $deletedFood = Food::where('IS_DELETED', 1)->get();
+        $deletedFishVarieties = Variety::where('IS_DELETED', 1) // Query ke model FishVariety
+            ->with('fish')  // Eager load relasi 'alternativeFish' yang ada di model FishVariety
+            ->get();
+        return view('admin.trash.index', compact(
+            'deletedAlternativeFish',
+            'deletedFood',
+            'deletedFishVarieties'
+        ));
     }
 
 
@@ -116,7 +137,7 @@ class AdminController extends Controller
     public function softDeleteFood($id)
     {
         $food = Food::findOrFail($id);
-        $food->is_deleted = 1;
+        $food->IS_DELETED = 1;
         $food->save();
 
         return redirect()->route('admin.foods.index');
@@ -125,10 +146,10 @@ class AdminController extends Controller
     public function recoverFood($id)
     {
         $food = Food::findOrFail($id);
-        $food->is_deleted = 0;
+        $food->IS_DELETED = 0;
         $food->save();
 
-        return redirect()->route('admin.foods.index');
+        return redirect()->route('admin.trash.index');
     }
 
     // ====== IKAN CRUD ======
@@ -200,7 +221,7 @@ class AdminController extends Controller
     public function softDeleteIkan($id)
     {
         $fish = AlternativeFish::findOrFail($id);
-        $fish->is_deleted = 1;
+        $fish->IS_DELETED = 1;
         $fish->save();
 
         return redirect()->route('admin.fishes.index');
@@ -209,10 +230,10 @@ class AdminController extends Controller
     public function recoverIkan($id)
     {
         $ikan = AlternativeFish::findOrFail($id);
-        $ikan->is_deleted = 0;
+        $ikan->IS_DELETED = 0;
         $ikan->save();
 
-        return redirect()->route('admin.fishes.index');
+        return redirect()->route('admin.trash.index');
     }
 
     public function verifyIkan(Request $request, $fishId)
@@ -322,7 +343,7 @@ class AdminController extends Controller
     public function softDeleteVariety($id)
     {
         $variety = Variety::findOrFail($id);
-        $variety->is_deleted = 1;
+        $variety->IS_DELETED = 1;
         $variety->save();
 
         return redirect()->route('admin.varieties.index');
@@ -331,12 +352,29 @@ class AdminController extends Controller
     public function recoverVariety($id)
     {
         $variety = Variety::findOrFail($id);
-        $variety->is_deleted = 0;
+        $variety->IS_DELETED = 0;
         $variety->save();
 
-        return redirect()->route('admin.varieties.index');
+        return redirect()->route('admin.trash.index');
     }
 
+    public function softDeleteUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->IS_DELETED = 1;
+        $user->save();
+
+        return redirect()->route('admin.users.index');
+    }
+
+    public function recoverUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->IS_DELETED = 0;
+        $user->save();
+
+        return redirect()->route('admin.users.index');
+    }
 
 
 

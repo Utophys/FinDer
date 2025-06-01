@@ -36,7 +36,7 @@ class FishController extends Controller
             'fish' => $fish,
             'groupedCriteria' => $groupedCriteria,
             'relatedFishes' => $relatedFishes,
-            'varieties' => $this->getFishVarieties($fish->NAME)
+            'varieties' => $this->getFishVarieties($fish->  FISH_ID)
         ]);
     }
 

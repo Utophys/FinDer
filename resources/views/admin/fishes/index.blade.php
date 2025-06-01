@@ -51,7 +51,6 @@
                     Verified
                 </button>
                 @endif
-                @if($fish['IS_DELETED'] == 0)
                 <form action="{{ route('admin.ikan.softDelete', $fish->FISH_ID) }}" method="POST"
                     onsubmit="return confirm('Hapus data ini?')" class="inline flex-1">
                     @csrf
@@ -61,17 +60,6 @@
                         Delete
                     </button>
                 </form>
-                @else
-                <form action="{{ route('admin.ikan.recover', $fish->FISH_ID) }}" method="POST"
-                    onsubmit="return confirm('Pulihkan data ini?')" class="inline flex-1">
-                    @csrf
-                    @method('PUT')
-                    <button type="submit"
-                        class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm w-full text-center">
-                        Recover
-                    </button>
-                </form>
-                @endif
             </div>
         </div>
 

@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 
@@ -54,6 +55,14 @@ class User extends Authenticatable implements CanResetPasswordContract
         return $this->DISPLAY_NAME;
     }
 
+    protected function image(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value, $attributes) => !empty($attributes['IMAGE'])
+            ? url('/storage/user/' . $attributes['IMAGE'])
+            : null
+        );
+    }
 
     public function getAuthPassword()
     {
