@@ -42,7 +42,7 @@ class AdminHistoryController extends Controller
                 ->where('RESULT_ID', $result->RESULT_ID)
                 ->get();
 
-            $user = (object)[
+            $user = (object) [
                 'DISPLAY_NAME' => $result->DISPLAY_NAME,
                 'EMAIL' => $result->EMAIL
             ];
@@ -77,8 +77,19 @@ class AdminHistoryController extends Controller
         }
 
         $allCriteria = Criteria::orderBy('CRITERIA_ID')->get();
-        $allAlternatives = AlternativeFish::orderBy('FISH_ID')->get();
-        $masterAlternativesData = MasterAlternative::all();
+        // Ambil FISH_ID yang relevan dari result_detail
+        $fishesInResult = ResultDetails::where('RESULT_ID', $result_id)
+            ->pluck('FISH_ID')
+            ->unique()
+            ->values();
+
+        // Ambil alternatif ikan berdasarkan FISH_ID yang ada di result_detail
+        $allAlternatives = AlternativeFish::whereIn('FISH_ID', $fishesInResult)
+            ->orderBy('FISH_ID')
+            ->get();
+
+        // Ambil data master_alternative berdasarkan FISH_ID yang ada di result_detail
+        $masterAlternativesData = MasterAlternative::whereIn('FISH_ID', $fishesInResult)->get();
 
         $initialMatrix = [];
         foreach ($allAlternatives as $alt) {
@@ -168,6 +179,6 @@ class AdminHistoryController extends Controller
             'resultId' => $result_id,
             'result' => $result
         ]);
-        
+
     }
 }
