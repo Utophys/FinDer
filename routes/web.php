@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\FishController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\AdminHistoryController;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -60,7 +61,7 @@ Route::post('/moorademo/store', [MooraController::class, 'storeResult'])->name('
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/foods', [AdminController::class, 'foodIndex'])->name('admin.foods.index');
     Route::get('/fishes', [AdminController::class, 'fishIndex'])->name('admin.fishes.index');
-    Route::get('/user-results', [AdminController::class, 'resultIndex'])->name('admin.user-results.index');
+    Route::get('/user-results', [AdminHistoryController::class, 'showAllUserDSSHistory'])->name('admin.user-results.index');
     Route::get('/varieties', [AdminController::class, 'varietyIndex'])->name('admin.varieties.index');
     Route::get('/users', [AdminController::class, 'usersIndex'])->name('admin.users.index');
     Route::get('/trash-bin', [AdminController::class, 'trashIndex'])->name('admin.trash.index');
@@ -80,14 +81,18 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::put('/varieties/{id}', [AdminController::class, 'updateVariety'])->name('admin.varieties.update');
     Route::put('/varieties/{id}/soft-delete', [AdminController::class, 'softDeleteVariety'])->name('admin.varieties.softDelete');
     Route::put('/varieties/{id}/recover', [AdminController::class, 'recoverVariety'])->name('admin.varieties.recover');
-
-    Route::put('/user/{id}/soft-delete', [AdminController::class, 'softDeleteUser'])->name('admin.user.softDelete');
+  
+    Route::get('/user-results/{result_id}', [AdminHistoryController::class, 'showCalculationForAdmin'])->name('admin.user-results.admincalculation');
+  
     Route::put('/user/{id}/recover', [AdminController::class, 'recoverUser'])->name('admin.user.recover');
+    Route::put('/user/{id}/soft-delete', [AdminController::class, 'softDeleteUser'])->name('admin.user.softDelete');
 
 
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
 });
+
+
 
 Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
