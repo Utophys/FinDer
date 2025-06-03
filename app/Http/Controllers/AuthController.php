@@ -94,15 +94,22 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:100', 'regex:/^[a-zA-Z0-9 ]+$/'],
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                'unique:user_account,EMAIL'
+            ],
             'password' => [
                 'required',
                 'string',
                 'min:8',
                 'confirmed',
-                'regex:/[a-z]/',
-                'regex:/[A-Z]/',
-                'regex:/[0-9]/',
-                'regex:/[@$!%*?&#]/'
+                'regex:/[a-z]/', 
+                'regex:/[A-Z]/', 
+                'regex:/[0-9]/', 
+                'regex:/[!@#$%^&*()_+\-=]/'
             ],
         ], [
             'name.required' => 'Nama wajib diisi.',
@@ -113,7 +120,7 @@ class AuthController extends Controller
             'password.required' => 'Password wajib diisi.',
             'password.min' => 'Password minimal :min karakter.',
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
-            'password.regex' => 'Password harus mengandung huruf besar, huruf kecil, angka, dan simbol.',
+            'password.regex' => 'Password harus mengandung huruf besar, huruf kecil, angka, simbol (!@#$%^&*()_-+=), dan angka.',
         ]);
 
         if ($validator->fails()) {
@@ -139,6 +146,7 @@ class AuthController extends Controller
             ->with('success', 'Registrasi Berhasil!.')
             ->with('active_panel', 'login');
     }
+
 
     public function logout(Request $request): RedirectResponse
     {
