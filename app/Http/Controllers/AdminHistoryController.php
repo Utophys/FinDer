@@ -13,7 +13,6 @@ use App\Models\MasterCriteria;
 class AdminHistoryController extends Controller
 {
 
-
     public function showAllUserDSSHistory()
     {
         $results = DB::table('result')

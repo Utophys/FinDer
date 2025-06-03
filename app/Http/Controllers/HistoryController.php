@@ -19,44 +19,41 @@ class HistoryController extends Controller
     public function showUserDSSHistory()
     {
         $user = auth()->user();
-
-        $userId = (string) Auth::id();
-
-
-        if (!$userId) {
+    
+        if (!$user) {
             abort(403, 'User not authenticated.');
         }
-
+    
+        $userId = (string) $user->id; 
+    
         $results = DB::table('result')
             ->where('USER_ID', $userId)
             ->orderBy('TIME_ADDED', 'desc')
             ->get();
-
-        if ($results->isEmpty()) {
-            return view('user.profile', ['resultsWithDetails' => []]);
+    
+        $resultsWithDetails = []; 
+    
+        if (!$results->isEmpty()) { 
+            foreach ($results as $result) {
+                $details = DB::table('result_detail')
+                    ->join('alternative_fish', 'result_detail.FISH_ID', '=', 'alternative_fish.FISH_ID')
+                    ->select('alternative_fish.NAME as fish_name', 'alternative_fish.IMAGE', 'result_detail.RANKING', 'result_detail.SCORE', 'result_detail.FISH_ID')
+                    ->where('result_detail.RESULT_ID', $result->RESULT_ID)
+                    ->orderBy('result_detail.RANKING')
+                    ->get();
+    
+                $criteria = DB::table('master_criteria')
+                    ->where('RESULT_ID', $result->RESULT_ID)
+                    ->get();
+    
+                $resultsWithDetails[] = [
+                    'result' => $result,
+                    'details' => $details,
+                    'criteria' => $criteria,
+                ];
+            }
         }
-
-        $resultsWithDetails = [];
-
-        foreach ($results as $result) {
-            $details = DB::table('result_detail')
-                ->join('alternative_fish', 'result_detail.FISH_ID', '=', 'alternative_fish.FISH_ID')
-                ->select('alternative_fish.NAME as fish_name', 'alternative_fish.IMAGE', 'result_detail.RANKING', 'result_detail.SCORE', 'result_detail.FISH_ID')
-                ->where('result_detail.RESULT_ID', $result->RESULT_ID)
-                ->orderBy('result_detail.RANKING')
-                ->get();
-
-            $criteria = DB::table('master_criteria')
-                ->where('RESULT_ID', $result->RESULT_ID)
-                ->get();
-
-            $resultsWithDetails[] = [
-                'result' => $result,
-                'details' => $details,
-                'criteria' => $criteria,
-            ];
-        }
-
+    
         return view('user.profile', compact('user', 'resultsWithDetails'));
     }
 
@@ -114,8 +111,7 @@ class HistoryController extends Controller
 
         return redirect()->back()->with('success', 'Profil berhasil diperbarui.');
     }
-
-
+    
 
 
     public function deleteProfile(Request $request)
