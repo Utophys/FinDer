@@ -17,45 +17,46 @@ class HistoryController extends Controller
 {
 
     public function showUserDSSHistory()
-    {
-        $user = auth()->user();
-    
-        if (!$user) {
-            abort(403, 'User not authenticated.');
-        }
-    
-        $userId = (string) $user->id; 
-    
-        $results = DB::table('result')
-            ->where('USER_ID', $userId)
-            ->orderBy('TIME_ADDED', 'desc')
-            ->get();
-    
-        $resultsWithDetails = []; 
-    
-        if (!$results->isEmpty()) { 
-            foreach ($results as $result) {
-                $details = DB::table('result_detail')
-                    ->join('alternative_fish', 'result_detail.FISH_ID', '=', 'alternative_fish.FISH_ID')
-                    ->select('alternative_fish.NAME as fish_name', 'alternative_fish.IMAGE', 'result_detail.RANKING', 'result_detail.SCORE', 'result_detail.FISH_ID')
-                    ->where('result_detail.RESULT_ID', $result->RESULT_ID)
-                    ->orderBy('result_detail.RANKING')
-                    ->get();
-    
-                $criteria = DB::table('master_criteria')
-                    ->where('RESULT_ID', $result->RESULT_ID)
-                    ->get();
-    
-                $resultsWithDetails[] = [
-                    'result' => $result,
-                    'details' => $details,
-                    'criteria' => $criteria,
-                ];
-            }
-        }
-    
-        return view('user.profile', compact('user', 'resultsWithDetails'));
+{
+    $user = auth()->user();
+
+    if (!$user) {
+        abort(403, 'User not authenticated.');
     }
+
+    $userId = (string) $user->USER_ID;
+
+    $results = DB::table('result')
+        ->where('USER_ID', $userId)
+        ->orderBy('TIME_ADDED', 'desc')
+        ->get();
+
+
+    $resultsWithDetails = [];
+
+    if (!$results->isEmpty()) {
+        foreach ($results as $result) {
+            $details = DB::table('result_detail')
+                ->join('alternative_fish', 'result_detail.FISH_ID', '=', 'alternative_fish.FISH_ID')
+                ->select('alternative_fish.NAME as fish_name', 'alternative_fish.IMAGE', 'result_detail.RANKING', 'result_detail.SCORE', 'result_detail.FISH_ID')
+                ->where('result_detail.RESULT_ID', $result->RESULT_ID)
+                ->orderBy('result_detail.RANKING')
+                ->get();
+
+            $criteria = DB::table('master_criteria')
+                ->where('RESULT_ID', $result->RESULT_ID)
+                ->get();
+
+            $resultsWithDetails[] = [
+                'result' => $result,
+                'details' => $details,
+                'criteria' => $criteria,
+            ];
+        }
+    }
+
+    return view('user.profile', compact('user', 'resultsWithDetails'));
+}
 
     public function updateProfile(Request $request)
     {
