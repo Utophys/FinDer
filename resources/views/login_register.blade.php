@@ -71,43 +71,64 @@
             animation: slide-out-left 0.5s ease-out forwards;
         }
     </style>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
 </head>
 
 <body class="bg-white w-screen h-screen overflow-hidden">
     @php
-    $activePanel = session('active_panel', 'login');
+        $activePanel = session('active_panel', 'login');
     @endphp
     <div class="flex h-full w-full" id="auth-container">
 
         <!-- Login Panel -->
-        <div id="login-panel" class="flex h-full w-full transition-transform duration-500 {{ $activePanel === 'login' ? '' : 'hidden' }}">
+        <div id="login-panel"
+            class="flex h-full w-full transition-transform duration-500 {{ $activePanel === 'login' ? '' : 'hidden' }}">
             <div class="w-[60%] bg-white text-black flex flex-col justify-center items-center text-center p-8 relative">
-                <img id="logo-left" src="{{ asset('assets/images/logo-finder.svg') }}" alt="FINder Logo" class="absolute top-4 left-6 h-24" />
+                <img id="logo-left" src="{{ asset('assets/images/logo-finder.svg') }}" alt="FINder Logo"
+                    class="absolute top-4 left-6 h-24" />
 
                 <!-- Login Form -->
-                <form action="{{ route('login') }}" method="POST" class="w-full max-w-md border border-gray-300 rounded-lg p-6">
+                <form action="{{ route('login') }}" method="POST"
+                    class="w-full max-w-md border border-gray-300 rounded-lg p-6">
                     @csrf
                     <h1 class="text-3xl font-bold text-center mb-2">Selamat Datang Kembali!</h1>
                     <p class="text-center text-gray-500 mb-2">Login Terlebih Dahulu</p>
 
                     <label class="block text-sm font-medium text-gray-700 mb-1 text-left">Email</label>
-                    <input type="email" name="email" placeholder="Your email" class="w-full p-3 border rounded mb-4" value="{{ old('email') }}" required />
+                    <input type="email" name="email" placeholder="Your email" class="w-full p-3 border rounded mb-4"
+                        value="{{ old('email') }}" required />
 
                     <label class="block text-sm font-medium text-gray-700 mb-1 text-left">Password</label>
                     <div class="relative mb-6">
-                        <input type="password" name="password" id="login-password" placeholder="Your password" class="w-full p-3 border rounded pr-10" />
-                        <span id="login-password-toggle" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer hidden" onclick="togglePassword('login-password')">
-                            <svg id="login-password-eye-slash" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-500">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                        <input type="password" name="password" id="login-password" placeholder="Your password"
+                            class="w-full p-3 border rounded pr-10" />
+                        <span id="login-password-toggle"
+                            class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer hidden"
+                            onclick="togglePassword('login-password')">
+                            <svg id="login-password-eye-slash" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                class="size-6 text-gray-500">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
                             </svg>
-                            <svg id="login-password-eye" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-500 hidden">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            <svg id="login-password-eye" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                class="size-6 text-gray-500 hidden">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                             </svg>
                         </span>
                     </div>
                     @error('email', 'login')
-                    <p class="flex justify-start text-red-500 text-sm mb-2">{{ $message }}</p>
+                        <p class="flex justify-start text-red-500 text-sm mb-2">{{ $message }}</p>
+                    @enderror
+                    <div class="cf-turnstile my-4" data-sitekey="{{ env('CLOUDFLARE_TURNSTILE_SITE_KEY') }}"
+                        data-theme="light" data-appearance="always"></div>
+                    @error('cf-turnstile-response', 'login')
+                        <p class="text-red-500 text-sm mb-2 text-left -mt-2">{{ $message }}</p>
                     @enderror
 
                     <div class="flex justify-end mt-2 mb-8">
@@ -119,11 +140,13 @@
 
 
 
-                    <button type="submit" class="w-full bg-black text-white py-3 rounded-full font-semibold mb-4">Sign In</button>
+                    <button type="submit" class="w-full bg-black text-white py-3 rounded-full font-semibold mb-4">Sign
+                        In</button>
 
                     <div class="text-center mb-4 text-gray-500">Or</div>
 
-                    <a href="{{ route('google.redirect') }}" class="w-full bg-black text-white py-3 rounded-full flex items-center justify-center">
+                    <a href="{{ route('google.redirect') }}"
+                        class="w-full bg-black text-white py-3 rounded-full flex items-center justify-center">
                         <img src="{{ asset('assets/images/icon-google.svg') }}" class="h-5 mr-2" alt="Google Icon">
                         Continue with Google
                     </a>
@@ -132,81 +155,116 @@
                 </form>
             </div>
 
-            <div class="w-[40%] bg-gradient-to-r from-blue-600 to-[#0E87CC] text-white flex flex-col justify-center items-center text-center p-8">
+            <div
+                class="w-[40%] bg-gradient-to-r from-blue-600 to-[#0E87CC] text-white flex flex-col justify-center items-center text-center p-8">
                 <h2 class="text-3xl font-bold mb-4">Belum Punya Akun?</h2>
                 <p class="mb-6 text-lg">Sign Up Sekarang, Dunia Ikan Menunggumu!</p>
-                <button onclick="switchToRegister()" class="bg-white text-[#0E87CC] px-6 py-3 rounded-full text-lg font-semibold">
+                <button onclick="switchToRegister()"
+                    class="bg-white text-[#0E87CC] px-6 py-3 rounded-full text-lg font-semibold">
                     Sign Up
                 </button>
             </div>
         </div>
 
         <!-- Register Panel -->
-        <div id="register-panel" class="flex h-full w-full transition-transform duration-500 {{ $activePanel === 'register' ? '' : 'hidden' }}">
-            <div class="w-[40%] bg-gradient-to-r from-blue-600 to-[#0E87CC] text-white flex flex-col justify-center items-center text-center p-8">
+        <div id="register-panel"
+            class="flex h-full w-full transition-transform duration-500 {{ $activePanel === 'register' ? '' : 'hidden' }}">
+            <div
+                class="w-[40%] bg-gradient-to-r from-blue-600 to-[#0E87CC] text-white flex flex-col justify-center items-center text-center p-8">
                 <h2 class="text-3xl font-bold mb-4">Sudah Punya Akun?</h2>
                 <p class="mb-6 text-lg">Cepat Login, Ikan-Ikan sudah Siap Untuk Dipelihara</p>
-                <button onclick="switchToLogin()" class="bg-white text-[#0E87CC] px-6 py-3 rounded-full text-lg font-semibold">
+                <button onclick="switchToLogin()"
+                    class="bg-white text-[#0E87CC] px-6 py-3 rounded-full text-lg font-semibold">
                     Sign In
                 </button>
             </div>
 
             <div class="w-[60%] bg-white flex flex-col justify-center items-center p-12 relative">
-                <img src="{{ asset('assets/images/logo-finder.svg') }}" alt="FINder Logo" class="absolute top-4 right-6 h-24" />
+                <img src="{{ asset('assets/images/logo-finder.svg') }}" alt="FINder Logo"
+                    class="absolute top-4 right-6 h-24" />
 
                 <!-- Register Form -->
-                <form action="{{ route('register') }}" method="POST" class="w-full max-w-md border border-gray-300 rounded-lg p-6">
+                <form action="{{ route('register') }}" method="POST"
+                    class="w-full max-w-md border border-gray-300 rounded-lg p-6">
                     @csrf
                     <h1 class="text-3xl font-bold text-center mb-2">Selamat Datang!</h1>
                     <p class="text-center text-gray-500 mb-2">Register Terlebih Dahulu</p>
 
                     <label class="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
-                    <input type="text" name="name" placeholder="Your Name" class="w-full p-3 border rounded mb-4" value="{{ old('name') }}" required />
+                    <input type="text" name="name" placeholder="Your Name" class="w-full p-3 border rounded mb-4"
+                        value="{{ old('name') }}" required />
                     @error('name', 'register')
-                    <p class="text-red-500 text-sm mb-2">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mb-2">{{ $message }}</p>
                     @enderror
 
                     <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                    <input type="email" name="email" placeholder="Your Email" class="w-full p-3 border rounded mb-4" value="{{ old('email') }}" required />
+                    <input type="email" name="email" placeholder="Your Email" class="w-full p-3 border rounded mb-4"
+                        value="{{ old('email') }}" required />
                     @error('email', 'register')
-                    <p class="text-red-500 text-sm mb-2">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mb-2">{{ $message }}</p>
                     @enderror
 
                     <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
                     <div class="relative mb-4">
-                        <input type="password" name="password" placeholder="Your Password" class="w-full p-3 border rounded pr-10" />
-                        <span id="register-password-toggle" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer hidden" onclick="toggleRegisterPasswords()">
-                            <svg id="register-password-eye-slash" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-500">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                        <input type="password" name="password" placeholder="Your Password"
+                            class="w-full p-3 border rounded pr-10" />
+                        <span id="register-password-toggle"
+                            class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer hidden"
+                            onclick="toggleRegisterPasswords()">
+                            <svg id="register-password-eye-slash" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                class="size-6 text-gray-500">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
                             </svg>
-                            <svg id="register-password-eye" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-500 hidden">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            <svg id="register-password-eye" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                class="size-6 text-gray-500 hidden">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                             </svg>
                         </span>
                     </div>
                     @error('password', 'register')
-                    <p class="text-red-500 text-sm mb-2">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mb-2">{{ $message }}</p>
                     @enderror
 
                     <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
                     <div class="relative mb-6">
-                        <input type="password" name="password_confirmation" id="register-confirm-password" placeholder="Confirm Password" class="w-full p-3 border rounded pr-10" />
-                        <span id="register-confirm-password-toggle" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer hidden" onclick="toggleRegisterPasswords()">
-                            <svg id="register-confirm-password-eye-slash" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-500">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                        <input type="password" name="password_confirmation" id="register-confirm-password"
+                            placeholder="Confirm Password" class="w-full p-3 border rounded pr-10" />
+                        <span id="register-confirm-password-toggle"
+                            class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer hidden"
+                            onclick="toggleRegisterPasswords()">
+                            <svg id="register-confirm-password-eye-slash" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                class="size-6 text-gray-500">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
                             </svg>
-                            <svg id="register-confirm-password-eye" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-gray-500 hidden">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            <svg id="register-confirm-password-eye" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                class="size-6 text-gray-500 hidden">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                             </svg>
                         </span>
                     </div>
                     @error('password_confirmation', 'register')
-                    <p class="text-red-500 text-sm mb-2">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mb-2">{{ $message }}</p>
                     @enderror
 
-                    <button type="submit" class="w-full bg-black text-white py-3 rounded-full font-semibold mb-4">Sign Up</button>
+                    <div class="cf-turnstile my-4" data-sitekey="{{ env('CLOUDFLARE_TURNSTILE_SITE_KEY') }}"
+                        data-theme="light" data-appearance="always"></div> @error('cf-turnstile-response', 'register')
+                            <p class="text-red-500 text-sm mb-2 text-left -mt-2">{{ $message }}</p>
+                        @enderror
+
+                    <button type="submit" class="w-full bg-black text-white py-3 rounded-full font-semibold mb-4">Sign
+                        Up</button>
                 </form>
             </div>
         </div>
