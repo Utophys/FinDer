@@ -10,7 +10,7 @@
         style="height: calc(100vh - 80px); flex-shrink: 0;">
         <div class="mb-4">
             @if ($user->IMAGE)
-            <img src="{{ asset('storage/user/' . Auth::user()->IMAGE) }}" alt="User Image"
+            <img src="{{ url(Auth::user()->IMAGE) }}" alt="User Image"
                 class="w-40 h-40 rounded-full object-cover">
             @else
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
