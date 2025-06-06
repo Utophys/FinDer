@@ -115,17 +115,26 @@
                     {{ $heroFish->DESCRIPTION ?: 'Deskripsi untuk ikan ini belum tersedia.' }}
                 </p>
                 <div class="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:space-x-5">
-                    <a href="{{ Route::has('user.fish_detail') ? route('user.fish_detail', ['id' => $heroFish->FISH_ID]) : '#' }}"
-                        class="inline-flex items-center justify-center space-x-2 text-white bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 text-base sm:text-lg group-hover:bg-yellow-400 group-hover:text-gray-900">
-                        <span>Lihat Detail</span>
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                    </a>
-                    <a href="{{ Route::has('user.dss.questions') ? route('user.dss.questions') : '#' }}"
-                        class="inline-flex items-center justify-center bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:scale-105 text-base sm:text-lg max-w-max">
-                        {{ $isFromSPK ? 'Ubah Preferensi SPK' : 'Mulai Kuesioner SPK' }}
-                    </a>
+                    {{-- Tombol Lihat Detail --}}
+                    <form method="GET" action="{{ Route::has('user.fish_detail') ? route('user.fish_detail', ['id' => $heroFish->FISH_ID]) : '#' }}">
+                        <button type="submit"
+                            class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 text-white bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-full font-semibold shadow-md transition-all duration-300 ease-in-out transform hover:scale-105 text-base sm:text-lg group-hover:bg-yellow-400 group-hover:text-gray-900">
+                            {{-- Perubahan: rounded-lg menjadi rounded-full --}}
+                            <span>Lihat Detail</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                        </button>
+                    </form>
+
+                    {{-- Tombol Kuesioner SPK --}}
+                    <form method="GET" action="{{ Route::has('user.dss.questions') ? route('user.dss.questions') : '#' }}">
+                        <button type="submit"
+                            class="w-full sm:w-auto inline-flex items-center justify-center bg-white text-blue-600 px-6 py-3 rounded-full font-semibold shadow-md hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:scale-105 text-base sm:text-lg max-w-max">
+                            {{-- Perubahan: rounded-lg menjadi rounded-full --}}
+                            {{ $isFromSPK ? 'Ubah Preferensi SPK' : 'Mulai Kuesioner SPK' }}
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -172,10 +181,11 @@
                 </div>
                 <h3 class="text-lg font-semibold text-gray-800">{{ $fish->NAME }}</h3>
                 <p class="text-sm text-gray-600 mt-1 line-clamp-2">{{ $fish->DESCRIPTION }}</p>
-                <a href="{{ route('user.fish_detail', $fish->FISH_ID) }}"
-                    class="mt-3 inline-block text-sm text-blue-600 hover:underline">
-                    Lihat detail
-                </a>
+                <form method="GET" action="{{ route('user.fish_detail', $fish->FISH_ID) }}" class="mt-3 inline-block">
+                    <button type="submit" class="bg-transparent border-none p-0 cursor-pointer text-sm text-blue-600 hover:text-blue-800">
+                        Lihat detail
+                    </button>
+                </form>
             </div>
             @endforeach
         </div>

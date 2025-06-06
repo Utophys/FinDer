@@ -27,14 +27,12 @@
 
         <h2 class="text-xl font-semibold mb-4">{{ $user->DISPLAY_NAME }}</h2>
 
-        <button onclick="toggleModal('editModal')"
-            class="flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-[#0E87CC] text-white rounded-full hover:bg-[#0C76B3] transition">
+        <button onclick="toggleModal('editModal')" style="border-radius: 9999px;" class="flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-[#0E87CC] text-white hover:bg-[#0C76B3] transition">
             Edit Profil
             <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 w-5 h-5" fill="none"
                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round"
-                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5
-                         4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931Z" />
+                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.54.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931Z" />
             </svg>
         </button>
     </div>
@@ -64,12 +62,11 @@
                     @endif
                 </div>
 
-                <div>
-                    <a href="{{ route('user.dss.calculation', ['result_id' => $entry['result']->RESULT_ID]) }}" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                <form method="GET" action="{{ route('user.dss.calculation', ['result_id' => $entry['result']->RESULT_ID]) }}">
+                    <button type="submit" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                         Lihat Perhitungan
-                    </a>
-
-                </div>
+                    </button>
+                </form>
             </div>
 
 

@@ -33,7 +33,7 @@
         <div class="container mx-auto px-6 h-full flex flex-col justify-center items-center text-center text-white relative z-10 max-w-full">
             <h1 class="text-5xl font-bold mb-4">About Us</h1>
             <p class="text-lg max-w-2xl mb-6">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                FinDer adalah Sistem Pendukung Keputusan yang membantu masyarakat dalam memilih ikan paling cocok untuk seseorang yang dilakukan dengan secara personalisasi.
             </p>
             <a href="#more-info" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-300" onclick="smoothScrollWithOffset('#more-info', 96)">
                 Selengkapnya
@@ -54,7 +54,7 @@
                 <div class="md:w-1/2 flex-1 md:pl-8 flex flex-col items-center justify-center pr-24">
                     <h2 class="text-3xl font-bold mb-3 text-center">FinDer</h2>
                     <p class="text-gray-600 text-justify text-base">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        Memilih ikan hias yang tepat seringkali terasa seperti sebuah 'pencarian' yang rumit. Sesuai namanya, FinDer (Fin-Finder) hadir sebagai 'Pencari Ikan' pribadi Anda, sebuah Sistem Pendukung Keputusan cerdas yang mengubah kebingungan menjadi kemudahan. Melalui kuesioner yang dirancang secara personal, kami memandu perjalanan Anda untuk 'Find Your Finest Partner'. Ini bukan sekadar menemukan ikan, melainkan menemukan rekan akuatik terbaik (finest partner) yang paling serasi dengan gaya hidup, preferensi, dan ekosistem akuarium Anda.
                     </p>
                 </div>
             </div>
@@ -62,9 +62,9 @@
             <div class="flex flex-col md:flex-row items-center mb-4">
                 <!-- Left: MOORA Description -->
                 <div class="md:w-1/2 flex-1 md:mb-0 flex flex-col items-center justify-center pl-24">
-                    <h3 class="text-2xl font-semibold mb-3 text-center">What is the MOORA Method?</h3>
+                    <h3 class="text-2xl font-semibold mb-3 text-center">Apa itu Metode MOORA?</h3>
                     <p class="text-gray-600 text-justify text-base">
-                        The MOORA (Multi-Objective Optimization by Ratio Analysis) method is a decision-making technique used in Decision Support Systems to rank alternatives based on multiple criteria, ensuring optimal and efficient solutions.
+                        Metode MOORA (Multi-Objective Optimization by Ratio Analysis) adalah teknik pengambilan keputusan yang digunakan dalam Sistem Pendukung Keputusan untuk menentukan peringkat alternatif berdasarkan berbagai kriteria, guna memastikan solusi yang optimal dan efisien.
                     </p>
                 </div>
                 <!-- Right: MOORA Logo -->
