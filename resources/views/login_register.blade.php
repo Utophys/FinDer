@@ -88,6 +88,24 @@
                 <img id="logo-left" src="{{ asset('assets/images/logo-finder.svg') }}" alt="FINder Logo"
                     class="absolute top-4 left-6 h-24" />
 
+                <!-- Success Message Display -->
+                @if (session('success'))
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-md relative mb-4 w-full max-w-md">
+                        <span class="block sm:inline">{{ session('success') }}</span>
+                    </div>
+                @endif
+                <!-- General Error Message Display -->
+                @if ($errors->has('general'))
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-md relative mb-4 w-full max-w-md">
+                        <ul class="list-disc list-inside">
+                            @foreach ($errors->get('general') as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+
                 <!-- Login Form -->
                 <form action="{{ route('login') }}" method="POST"
                     class="w-full max-w-md border border-gray-300 rounded-lg p-6">
@@ -97,7 +115,7 @@
 
                     <label class="block text-sm font-medium text-gray-700 mb-1 text-left">Email</label>
                     <input type="email" name="email" placeholder="Your email" class="w-full p-3 border rounded mb-4"
-                        value="{{ old('email') }}" required />
+                        value="{{ old('email', session('email')) }}" required /> {{-- Updated: Use session('email') --}}
 
                     <label class="block text-sm font-medium text-gray-700 mb-1 text-left">Password</label>
                     <div class="relative mb-6">
@@ -138,8 +156,6 @@
                         </label>
                     </div>
 
-
-
                     <button type="submit" class="w-full bg-black text-white py-3 rounded-full font-semibold mb-4">Sign
                         In</button>
 
@@ -150,8 +166,6 @@
                         <img src="{{ asset('assets/images/icon-google.svg') }}" class="h-5 mr-2" alt="Google Icon">
                         Continue with Google
                     </a>
-
-
                 </form>
             </div>
 
@@ -206,7 +220,7 @@
 
                     <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
                     <div class="relative mb-4">
-                        <input type="password" name="password" placeholder="Your Password"
+                        <input type="password" name="password" id="register-password" placeholder="Your Password"
                             class="w-full p-3 border rounded pr-10" />
                         <span id="register-password-toggle"
                             class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer hidden"
@@ -269,8 +283,6 @@
             </div>
         </div>
     </div>
-
-
 
     <script>
         let isAnimating = false;
@@ -383,8 +395,24 @@
 
             registerPassword.addEventListener('input', updateRegisterToggles);
             registerConfirmPassword.addEventListener('input', updateRegisterToggles);
+
+            // Immediately show/hide based on initial values (e.g., old input from validation errors)
+            loginPasswordToggle.classList.toggle('hidden', loginPassword.value === '');
+            updateRegisterToggles();
+
+            // Set active panel on page load based on session
+            const activePanel = "{{ $activePanel }}";
+            const loginPanel = document.getElementById('login-panel');
+            const registerPanel = document.getElementById('register-panel');
+
+            if (activePanel === 'register') {
+                loginPanel.classList.add('hidden');
+                registerPanel.classList.remove('hidden');
+            } else {
+                registerPanel.classList.add('hidden');
+                loginPanel.classList.remove('hidden');
+            }
         });
     </script>
 </body>
-
 </html>
