@@ -248,6 +248,7 @@ class AuthController extends Controller
                         'set_password' => 1,
                         'role' => 'user',
                         'image' => '',
+                        'phone_number' => NULL,
                         'is_deleted' => 0,
                     ]),
                     'created_at' => Carbon::now(),
@@ -349,6 +350,7 @@ class AuthController extends Controller
                 'SET_PASSWORD' => $userData['set_password'],
                 'ROLE' => $userData['role'],
                 'EMAIL' => $request->email,
+                'PHONE_NUMBER' => NULL,
                 'IMAGE' => $userData['image'],
                 'IS_DELETED' => $userData['is_deleted'],
             ]);
@@ -483,6 +485,7 @@ class AuthController extends Controller
                     'SET_PASSWORD' => 0,
                     'ROLE' => 'user',
                     'IMAGE' => $googleUser->getAvatar(),
+                    'PHONE_NUMBER' => NULL,
                     'IS_DELETED' => 0,
                 ]);
             }

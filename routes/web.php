@@ -100,3 +100,4 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
 Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
+
