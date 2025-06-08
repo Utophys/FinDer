@@ -83,17 +83,17 @@
                                     @switch(strtolower($criteria['NAME']))
                                     @case('harga')
                                     @case('biaya pemeliharaan')
-                                    <option value="1">Sangat Mahal</option>
-                                    <option value="2">Mahal</option>
-                                    <option value="3">Menengah</option>
-                                    <option value="4">Murah</option>
+                                    <option value="4">Sangat Mahal</option>
+                                    <option value="3">Mahal</option>
+                                    <option value="2">Menengah</option>
+                                    <option value="1">Murah</option>
                                     @break
 
                                     @case('kompleksitas pemeliharaan')
-                                    <option value="1">Sangat Sulit</option>
-                                    <option value="2">Sulit</option>
-                                    <option value="3">Standar</option>
-                                    <option value="4">Mudah</option>
+                                    <option value="4">Sangat Sulit</option>
+                                    <option value="3">Sulit</option>
+                                    <option value="2">Standar</option>
+                                    <option value="1">Mudah</option>
                                     @break
 
                                     @case('kelangkaan')
@@ -104,21 +104,24 @@
                                     @break
 
                                     @case('ukuran')
-                                    <option value="1">Besar</option>
+                                    <option value="4">Jumbo</option>
+                                    <option value="3">Besar</option>
                                     <option value="2">Sedang</option>
-                                    <option value="3">Kecil</option>
+                                    <option value="1">Kecil</option>
                                     @break
 
                                     @case('estetika')
                                     <option value="1">Biasa saja</option>
                                     <option value="2">Indah</option>
                                     <option value="3">Mencolok</option>
+                                    <option value="4">Zina Mata</option>                                    
                                     @break
 
                                     @case('perilaku')
                                     <option value="1">Liar/Agresif</option>
                                     <option value="2">Biasa saja</option>
                                     <option value="3">Jinak</option>
+                                    <option value="4">Teman Sejati</option>
                                     @break
 
                                     @default
