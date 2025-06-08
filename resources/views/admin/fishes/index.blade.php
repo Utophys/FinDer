@@ -78,7 +78,7 @@
                             @foreach($criterias as $criteria)
                             <div class="mb-3">
                                 <label class="form-label font-semibold">Kriteria {{ $criteria['NAME'] }}</label>
-                                <select name="criteria[{{ $criteria['CRITERIA_ID'] }}]" class="form-select" required>
+                                <select name="criteria[{{ $criteria['CRITERIA_ID'] }}]" class="form-select">
                                     <option value="" disabled selected>-- Pilih Jawaban --</option>
                                     @switch(strtolower($criteria['NAME']))
                                     @case('harga')
@@ -151,7 +151,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-black">
-                            <input type="text" name="NAME" class="form-control mt-2" placeholder="Nama" required value="{{ old('NAME', $fish->NAME) }}">
+                            <input type="text" name="NAME" class="form-control mt-2" placeholder="Nama" value="{{ old('NAME', $fish->NAME) }}">
 
                             <div class="mb-4 mt-2">
                                 <label class="block text-gray-700 font-semibold mb-2" for="imageEdit{{ $fish->FISH_ID }}">Gambar Ikan (kosongkan jika tidak ingin ganti)</label>
@@ -163,7 +163,7 @@
 
                             <textarea name="DESCRIPTION" class="form-control mt-2" placeholder="Deskripsi">{{ old('DESCRIPTION', $fish->DESCRIPTION) }}</textarea>
 
-                            <select name="FOOD_ID" class="form-control mt-2" required>
+                            <select name="FOOD_ID" class="form-control mt-2">
                                 @foreach ($foods as $food)
                                 <option value="{{ $food->FOOD_ID }}" {{ $food->FOOD_ID == old('FOOD_ID', $fish->FOOD_ID) ? 'selected' : '' }}>
                                     {{ $food->NAME }}
@@ -194,7 +194,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-black">
-                    <input type="text" name="NAME" class="form-control mt-2" placeholder="Nama" required>
+                    <input type="text" name="NAME" class="form-control mt-2" placeholder="Nama">
 
                     <div class="mb-4 mt-2">
                         <label class="block text-gray-700 font-semibold mb-2" for="image">Gambar Ikan</label>
@@ -270,5 +270,62 @@
         });
     });
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const formCreate = document.querySelector('#createIkanModal form');
+
+    if (formCreate) {
+        formCreate.addEventListener('submit', function (e) {
+            const name = formCreate.querySelector('input[name="NAME"]').value.trim();
+            const desc = formCreate.querySelector('textarea[name="DESCRIPTION"]').value.trim();
+            const food = formCreate.querySelector('select[name="FOOD_ID"]').value;
+            const imageInput = formCreate.querySelector('input[name="IMAGE"]');
+            const imageFile = imageInput.files[0];
+
+            // Format gambar yang diperbolehkan
+            const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+            // Cek field wajib
+            if (!name || !desc || !food) {
+                alert('Mohon lengkapi semua field: Nama, Deskripsi, dan Makanan Terkait.');
+                e.preventDefault();
+                return;
+            }
+
+            // Cek format gambar jika user memilih file
+            if (imageFile) {
+                const fileExtension = imageFile.name.split('.').pop().toLowerCase();
+                if (!allowedExtensions.includes(fileExtension)) {
+                    alert('Format gambar tidak didukung. Hanya boleh: JPG, JPEG, PNG, GIF, atau WEBP.');
+                    e.preventDefault();
+                    return;
+                }
+            }
+        });
+    }
+
+      const verifyForms = document.querySelectorAll('form[action*="verify"]');
+
+    verifyForms.forEach(form => {
+        form.addEventListener('submit', function (e) {
+            const selects = form.querySelectorAll('select[name^="criteria"]');
+            let allSelected = true;
+            selects.forEach(select => {
+                if (!select.value) {
+                    allSelected = false;
+                }
+            });
+
+            if (!allSelected) {
+                alert('Mohon isi semua pilihan pada form verifikasi.');
+                e.preventDefault();
+            }
+        });
+    });
+});
+</script>
+
+
 
 @endsection

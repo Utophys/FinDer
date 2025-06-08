@@ -75,7 +75,7 @@
                                                         <label for="FISH_ID{{ $variety->FISH_VARIETY_ID }}"
                                                             class="block text-gray-700 font-semibold mb-2">Pilih Ikan</label>
                                                         <select name="FISH_ID" id="FISH_ID{{ $variety->FISH_VARIETY_ID }}"
-                                                            class="form-control" required>
+                                                            class="form-control">
                                                             <option value="">-- Pilih Ikan --</option>
                                                             @foreach($fishes as $fish)
                                                                 <option value="{{ $fish->FISH_ID }}" {{ $variety->FISH_ID == $fish->FISH_ID ? 'selected' : '' }}>
@@ -90,7 +90,7 @@
                                                             class="block text-gray-700 font-semibold mb-2">Nama Variasi</label>
                                                         <input type="text" name="VARIETY_NAME"
                                                             id="VARIETY_NAME{{ $variety->FISH_VARIETY_ID }}" class="form-control"
-                                                            value="{{ old('VARIETY_NAME', $variety->VARIETY_NAME) }}" required>
+                                                            value="{{ old('VARIETY_NAME', $variety->VARIETY_NAME) }}">
                                                     </div>
 
                                                     <div class="mb-3">
@@ -143,7 +143,7 @@
                     <div class="modal-body text-black">
                         <div class="mb-3">
                             <label for="FISH_ID" class="block text-gray-700 font-semibold mb-2">Pilih Ikan</label>
-                            <select name="FISH_ID" id="FISH_ID" class="form-control" required>
+                            <select name="FISH_ID" id="FISH_ID" class="form-control">
                                 <option value="">-- Pilih Ikan --</option>
                                 @foreach($fishes as $fish)
                                     <option value="{{ $fish->FISH_ID }}">{{ $fish->NAME }}</option>
@@ -153,12 +153,12 @@
 
                         <div class="mb-3">
                             <label for="VARIETY_NAME" class="block text-gray-700 font-semibold mb-2">Nama Variasi</label>
-                            <input type="text" name="VARIETY_NAME" id="VARIETY_NAME" class="form-control" required>
+                            <input type="text" name="VARIETY_NAME" id="VARIETY_NAME" class="form-control">
                         </div>
 
                         <div class="mb-3">
                             <label for="IMAGE" class="block text-gray-700 font-semibold mb-2">Gambar</label>
-                            <input type="file" name="IMAGE" id="IMAGE" class="form-control" accept="image/*" required>
+                            <input type="file" name="IMAGE" id="IMAGE" class="form-control" accept="image/*">
                         </div>
 
                         <div class="mb-3">
@@ -175,5 +175,106 @@
             </form>
         </div>
     </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    // --- Validasi Create Modal ---
+    const createForm = document.querySelector('#createVarietyModal form');
+    if (createForm) {
+        createForm.addEventListener('submit', function(e) {
+            let errors = [];
+
+            const fishId = this.querySelector('select[name="FISH_ID"]').value.trim();
+            const varietyName = this.querySelector('input[name="VARIETY_NAME"]').value.trim();
+            const imageInput = this.querySelector('input[name="IMAGE"]');
+            const description = this.querySelector('textarea[name="DESCRIPTION"]').value.trim();
+
+            // Validate Fish ID
+            if (!fishId) {
+                errors.push("Pilih ikan wajib diisi.");
+            }
+
+            // Validate Variety Name
+            if (!varietyName) {
+                errors.push("Nama variasi wajib diisi.");
+            } else if (varietyName.length > 255) {
+                errors.push("Nama variasi maksimal 255 karakter.");
+            }
+
+
+            if (!imageInput.files || imageInput.files.length === 0) {
+                errors.push("Gambar wajib diupload.");
+            } else {
+                const file = imageInput.files[0];
+                const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/svg+xml'];
+                if (!validTypes.includes(file.type)) {
+                    errors.push("Tipe file gambar tidak valid. Harus jpeg, png, jpg, gif, atau svg.");
+                }
+                if (file.size > 2 * 1024 * 1024) {
+                    errors.push("Ukuran file gambar maksimal 2MB.");
+                }
+            }
+
+            // Validate Description (optional, max 1000 chars)
+            if (description.length > 1000) {
+                errors.push("Deskripsi maksimal 1000 karakter.");
+            }
+
+            if (errors.length > 0) {
+                e.preventDefault();
+                alert(errors.join('\n'));
+            }
+        });
+    }
+
+    // --- Validasi Edit Modals ---
+    // Karena ada banyak modal edit, kita loop semua form di modal edit
+    document.querySelectorAll('form[action*="admin.varieties.update"]').forEach(editForm => {
+        editForm.addEventListener('submit', function(e) {
+            let errors = [];
+
+            const fishId = this.querySelector('select[name="FISH_ID"]').value.trim();
+            const varietyName = this.querySelector('input[name="VARIETY_NAME"]').value.trim();
+            const imageInput = this.querySelector('input[name="IMAGE"]');
+            const description = this.querySelector('textarea[name="DESCRIPTION"]').value.trim();
+
+            // Validate Fish ID
+            if (!fishId) {
+                errors.push("Pilih ikan wajib diisi.");
+            }
+
+            // Validate Variety Name
+            if (!varietyName) {
+                errors.push("Nama variasi wajib diisi.");
+            } else if (varietyName.length > 255) {
+                errors.push("Nama variasi maksimal 255 karakter.");
+            }
+
+            // Validate Image (optional, if ada file dicek tipe dan size)
+            if (imageInput.files && imageInput.files.length > 0) {
+                const file = imageInput.files[0];
+                const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/svg+xml'];
+                if (!validTypes.includes(file.type)) {
+                    errors.push("Tipe file gambar tidak valid. Harus jpeg, png, jpg, gif, atau svg.");
+                }
+                if (file.size > 2 * 1024 * 1024) {
+                    errors.push("Ukuran file gambar maksimal 2MB.");
+                }
+            }
+
+            // Validate Description (optional, max 1000 chars)
+            if (description.length > 1000) {
+                errors.push("Deskripsi maksimal 1000 karakter.");
+            }
+
+            if (errors.length > 0) {
+                e.preventDefault();
+                alert(errors.join('\n'));
+            }
+        });
+    });
+});
+</script>
+
 
 @endsection
