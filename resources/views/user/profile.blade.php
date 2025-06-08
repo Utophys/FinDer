@@ -23,9 +23,13 @@
             @endif
         </div>
 
-
-
-        <h2 class="text-xl font-semibold mb-4">{{ $user->DISPLAY_NAME }}</h2>
+        <h2 class="text-xl font-semibold mb-2">{{ $user->DISPLAY_NAME }}</h2>
+        <!-- for Displaying the Phone Number -->
+        @if ($user->PHONE_NUMBER)
+        <p class="text-gray-700 mb-4">{{ $decryptedPhoneNumber }}</p>
+        @else
+        <p class="text-gray-500 mb-4">No phone number set</p>
+        @endif
 
         <button onclick="toggleModal('editModal')" style="border-radius: 9999px;" class="flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-[#0E87CC] text-white hover:bg-[#0C76B3] transition">
             Edit Profil
@@ -204,6 +208,14 @@
                 @endif
             </div>
 
+            <div>
+                <label for="phone_number" class="block mb-2 font-medium text-gray-700">Nomor Telepon (Opsional)</label>
+                <input type="text" id="phone_number" name="phone_number" value="{{ old('phone_number', $decryptedPhoneNumber) }}"
+                    class="w-full rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#0E87CC] focus:border-transparent" />
+                @if ($errors->update->has('phone_number'))
+                <p class="mt-1 text-sm text-red-500">{{ $errors->update->first('phone_number') }}</p>
+                @endif
+            </div>
 
             <label for="password" class="block mb-2 font-medium text-gray-700">Password Baru</label>
             <div class="relative">
