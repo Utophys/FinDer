@@ -1,0 +1,35 @@
+# phpstan.neon
+includes:
+    # This line is crucial for Larastan to integrate with PHPStan
+    - ./vendor/larastan/larastan/extension.neon
+
+parameters:
+    # The 'level' parameter defines the strictness of the analysis.
+    # Levels range from 0 (very loose) to 9 (very strict).
+    # For a new Laravel 12 project, starting at level 5 or 6 is often recommended.
+    # You can increase this gradually as you fix issues.
+    level: 6
+
+    # 'paths' defines which directories/files PHPStan should analyze.
+    # These are common directories for a Laravel project.
+    paths:
+        - app/
+        - database/
+        - routes/
+        - config/
+        - tests/
+
+    # You can optionally exclude specific paths from analysis.
+    # This is useful for third-party code or files that are intentionally
+    # "broken" for testing purposes.
+    # excludePaths:
+    #     - app/Http/Controllers/SomeLegacyController.php
+
+    # 'ignoreErrors' allows you to ignore specific errors based on regex patterns.
+    # Use this sparingly and ideally only for known false positives or
+    # temporary workarounds. It's better to fix the code if possible.
+    # ignoreErrors:
+    #     - '#Call to an undefined method .*::doSomethingThatIsActuallyDefinedViaMagic#'
+    #     # Example of ignoring an error in a specific file
+    #     # - message: '#Access to an undefined property App\\\\Models\\\\User::\\$someProperty#'
+    #     #   path: app/Http/Controllers/MyController.php

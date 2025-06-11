@@ -115,13 +115,23 @@ class HistoryController extends Controller
         }
 
         if ($request->hasFile('image')) {
-            if ($user->IMAGE && Storage::disk('public')->exists('user/' . $user->IMAGE)) {
-                Storage::disk('public')->delete('user/' . $user->IMAGE);
-            }
             $image = $request->file('image');
             $filename = $image->hashName();
-            $image->storeAs('user', $filename, 'public');
-            $user->IMAGE = $filename;
+            $path = 'user/' . $filename;
+        
+            $storeSuccess = Storage::disk('public')->put($path, file_get_contents($image));
+        
+            if ($storeSuccess) {
+                if ($user->IMAGE && Storage::disk('public')->exists('user/' . $user->IMAGE)) {
+                    Storage::disk('public')->delete('user/' . $user->IMAGE);
+                }
+                $user->IMAGE = $filename;
+            } else {
+                return redirect()->back()
+                    ->withErrors(['image' => 'Gagal menyimpan gambar profil. Silakan coba lagi.'])
+                    ->withInput()
+                    ->with('active_panel', 'edit');
+            }
         }
 
 
