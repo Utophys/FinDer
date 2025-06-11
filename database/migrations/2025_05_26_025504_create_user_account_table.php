@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('PASSWORD', 100)->nullable();
             $table->boolean('SET_PASSWORD')->default(false); // Added based on ALTER TABLE
             $table->string('ROLE', 20)->nullable();
-            $table->string('EMAIL', 40)->unique();
+            $table->string('EMAIL', 255)->unique();
             $table->string('PHONE_NUMBER', 255)->nullable();
             $table->string('IMAGE', 255); // NOT NULL (can be empty string)
             $table->boolean('IS_DELETED');
