@@ -87,29 +87,29 @@
     <section id="about-developer" class="bg-blue-800 relative" style="height: calc(100vh - 96px);">
         <div class="container mx-auto px-8 h-full flex flex-col max-w-full">
             <h2 class="text-4xl font-bold text-center text-white pt-8 mb-6">About Developer</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- Developer 1 -->
-                <div class="relative group">
-                    <img src="{{ asset('assets/images/thinkerman.jpg') }}" alt="Developer 1" class="w-full h-80 object-cover rounded-lg">
+                <div class="relative group aspect-[3/4] h-96">
+                    <img src="{{ asset('assets/images/Rifat.jpg') }}" alt="Developer 1" class="absolute inset-0 w-full h-full object-contain rounded-lg">
                     <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 flex flex-col justify-center items-center text-white rounded-lg transition duration-300">
-                        <p class="text-lg font-semibold">Orang 1</p>
-                        <p class="text-sm">NIM: 230741101</p>
+                        <p class="text-lg font-semibold">Mochamad Rifat Syahman Hambali</p>
+                        <p class="text-sm">2307411031</p>
                     </div>
                 </div>
                 <!-- Developer 2 -->
-                <div class="relative group">
-                    <img src="{{ asset('assets/images/thinkerman.jpg') }}" alt="Developer 2" class="w-full h-80 object-cover rounded-lg">
+                <div class="relative group aspect-[3/4] h-96">
+                    <img src="{{ asset('assets/images/Sulthan.jpg') }}" alt="Developer 2" class="absolute inset-0 w-full h-full object-contain rounded-lg">
                     <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 flex flex-col justify-center items-center text-white rounded-lg transition duration-300">
-                        <p class="text-lg font-semibold">Orang 2</p>
-                        <p class="text-sm">NIM: 230741102</p>
+                        <p class="text-lg font-semibold">Sulthan Islami Zacky</p>
+                        <p class="text-sm">2307411033</p>
                     </div>
                 </div>
                 <!-- Developer 3 -->
-                <div class="relative group">
-                    <img src="{{ asset('assets/images/thinkerman.jpg') }}" alt="Developer 3" class="w-full h-80 object-cover rounded-lg">
+                <div class="relative group aspect-[3/4] h-96">
+                    <img src="{{ asset('assets/images/Melvin.jpg') }}" alt="Developer 3" class="absolute inset-0 w-full h-full object-contain rounded-lg">
                     <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 flex flex-col justify-center items-center text-white rounded-lg transition duration-300">
-                        <p class="text-lg font-semibold">Orang 3</p>
-                        <p class="text-sm">NIM: 230741103</p>
+                        <p class="text-lg font-semibold">Melvin Okniel Sinaga</p>
+                        <p class="text-sm">2307411031</p>
                     </div>
                 </div>
             </div>
